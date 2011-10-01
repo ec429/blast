@@ -1,0 +1,18 @@
+blast: hacking notes
+
+Get fonts from http://www.worldofspectrum.org/infoseekid.cgi?id=0022511
+
+Layout of buffer:
+
+000		maxy: short
+001		maxx: short
+002		in_mode: short: (0=RAW 1=CBREAK 2=NOCBREAK (line)) | (4=ECHO) | (8=DELAY)
+003		in_tm: long: half-delay timeout, if in_mode&8; else ignored
+005		in_buf: array of 4 char (if in_mode&3==NOCBREAK, then in_buf[1:0] is a pointer; in_buf[3:2] is the buffer length).  The buffer is circular (if input_isv() wants to write, and the buffer's full, it should beep())
+009		in_buf_p: short; bits 1:0 are the write index for input_isv(), bits 5:4 are the read index for getch() and friends
+00a		font: void *
+00c		font_stand: void * (if NULL, then use generated underlining)
+00e		font_fmt: short (low 4 bits are format of font, high 4 are format of standout font)
+00f		ado: short attrdata offset in 8-byte units
+010		chardata: array of maxy lines, each of which is an array of maxx 7-bit characters; the high bit is used to indicate "needs repaint"
+ado<<3	attrdata: array laid out similarly to chardata.  The repaint bit is common to both data and attribute parts (ie. if one is changed, both are repainted).  Attributes are stored in attrset() form (SBPPPIII)
