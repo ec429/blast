@@ -122,6 +122,7 @@ F_refresh:
 	LD A,BE_INVAL
 	RET Z
 	LD BC,0
+.refresh_loop:
 	PUSH BC				; {y,x}
 	LD C,(IX+1)
 	CALL .multiply8
@@ -202,7 +203,17 @@ F_refresh:
 						; finished painting character
 	POP BC				; ={y,x}
 .refresh_next:
-	RET ; unfinished
+	INC C
+	LD A,C
+	CP (IX+1)
+	JP M,.refresh_loop
+	LD C,0
+	INC B
+	LD A,B
+	CP (IX+0)
+	JP M,.refresh_loop
+	LD A,0
+	RET
 
 .multiply8:				; HL = B * C; uses A,D
 	LD HL,0
