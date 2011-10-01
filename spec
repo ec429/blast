@@ -30,7 +30,7 @@ long b_buflen(short lines __A, short columns __B)
 short initscr(void *buffer __HL, short lines __A, short columns __B)
 	Set up blast data area.
 	BE_INVAL: buffer==NULL.
-	BE_RANGE: lines > 24.
+	BE_RANGE: lines > 24 or lines*columns > 2040.
 short setfont(void *buffer __HL, void *fontdata __DE, short options __A)
 	Sets buffer to use the supplied font.  Implementations (and third-party fonts) should document the values of columns and opts required for each font to render correctly.  initscr() sets the font address to the Spectrum's 40-column ROM font.
 	options consists of flags which may be bitwise ORed together (except that only one BFF_format may be used):

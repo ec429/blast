@@ -10,6 +10,17 @@
 F_b_buflen:
 	LD C,A
 	CALL .multiply8
+	LD A,L
+	ADD HL,HL
+	AND 7
+	JR Z,.buflen_round
+	XOR 7
+	INC A
+	ADD A,L
+	LD L,A
+	JR NC,.buflen_round
+	INC H
+.buflen_round:
 	LD DE,0x10
 	ADD HL,DE
 	RET
