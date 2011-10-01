@@ -11,14 +11,13 @@ O_CURY		equ	2
 O_CURX		equ	3
 O_INMODE	equ	4
 O_INTM		equ	5
-; padding	at	7
+O_INBUFP	equ	7
 O_INBUF		equ	8
-O_INBUFP	equ	0x10
-O_ATTR		equ	0x11
+O_ADO		equ	0x10
 O_FONT		equ	0x12
 O_FONTSTAND	equ	0x14
 O_FONTFMT	equ	0x16
-O_ADO		equ	0x17
+O_ATTR		equ	0x17
 O_CHARDATA	equ	0x18
 
 .text
@@ -28,15 +27,6 @@ F_b_buflen:
 	CALL .multiply8
 	LD A,L
 	ADD HL,HL
-	AND 7
-	JR Z,.buflen_round
-	XOR 7
-	INC A
-	ADD A,L
-	LD L,A
-	JR NC,.buflen_round
-	INC H
-.buflen_round:
 	LD DE,O_CHARDATA
 	ADD HL,DE
 	RET
@@ -65,26 +55,8 @@ F_initscr:
 	LD (IX+O_FONTFMT),0
 	LD (IX+O_ATTR),0x38
 	CALL .multiply8
-	LD A,L
-	AND 7
-	PUSH AF
-	SRL H
-	RR L
-	SRL H
-	RR L
-	SRL H
-	RR L
-	POP AF
-	JR Z,.init_round
-	INC HL
-.init_round:
-	LD A,H
-	AND A
-	JR Z,.init_range2
-	LD A,BE_RANGE
-	RET
-.init_range2:
 	LD (IX+O_ADO),L
+	LD (IX+O_ADO+1),H
 	JP F_clear
 
 .global F_clear
@@ -94,14 +66,8 @@ F_clear:
 	LD A,BE_INVAL
 	RET Z
 	LD L,(IX+O_ADO)
-	LD H,0
-	SLA L
-	RL H
-	SLA L
-	RL H
-	SLA L
-	RL H
-	PUSH HL				; ado<<3
+	LD H,(IX+O_ADO+1)
+	PUSH HL				; ado
 	LD DE,O_CHARDATA
 	SBC HL,DE
 	PUSH HL
@@ -118,7 +84,7 @@ F_clear:
 	LD (HL),0xA0		; ' ' | 0x80
 	LDIR
 	POP BC				; =ldircount
-	POP DE				; =ado<<3
+	POP DE				; =ado
 	PUSH IX
 	POP HL
 	ADD HL,DE
@@ -151,11 +117,8 @@ F_refresh:
 	ADD HL,BC
 	PUSH HL				; buffer+(y*maxx)+x
 	EX AF,AF'
-	LD H,0
 	LD L,(IX+O_ADO)
-	ADD HL,HL
-	ADD HL,HL
-	ADD HL,HL
+	LD H,(IX+O_ADO+1)
 	PUSH HL
 	POP BC
 	POP HL				; =buffer+(y*maxx)+x
