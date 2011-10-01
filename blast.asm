@@ -115,6 +115,17 @@ F_addch:
 	LD A,0xFF
 	RET
 
+.global F_mvaddch
+F_mvaddch:
+	LD D,A
+	PUSH DE
+	CALL F_move
+	POP DE
+	AND A
+	RET NZ
+	LD A,D
+	JP F_addch
+
 .global F_clear
 F_clear:
 	LD A,IXH
@@ -247,6 +258,25 @@ F_refresh:
 	LD A,B
 	CP (IX+O_MAXY)
 	JP M,.refresh_loop
+	LD A,0
+	RET
+
+.global F_move
+F_move:
+	LD A,IXH
+	OR IXL
+	LD A,BE_INVAL
+	RET Z
+	LD A,B
+	CP (IX+O_MAXY)
+	LD A,BE_RANGE
+	RET P
+	LD A,C
+	CP (IX+O_MAXX)
+	LD A,BE_RANGE
+	RET P
+	LD (IX+O_CURY),B
+	LD (IX+O_CURX),C
 	LD A,0
 	RET
 
