@@ -5,6 +5,22 @@
 
 .include	"blast.inc"
 
+O_MAXY		equ	0
+O_MAXX		equ	1
+O_CURY		equ	2
+O_CURX		equ	3
+O_INMODE	equ	4
+O_INTM		equ	5
+; padding	at	7
+O_INBUF		equ	8
+O_INBUFP	equ	0x10
+O_ATTR		equ	0x11
+O_FONT		equ	0x12
+O_FONTSTAND	equ	0x14
+O_FONTFMT	equ	0x16
+O_ADO		equ	0x17
+O_CHARDATA	equ	0x18
+
 .text
 .global F_b_buflen
 F_b_buflen:
@@ -21,7 +37,7 @@ F_b_buflen:
 	JR NC,.buflen_round
 	INC H
 .buflen_round:
-	LD DE,0x10
+	LD DE,O_CHARDATA
 	ADD HL,DE
 	RET
 
@@ -38,16 +54,16 @@ F_initscr:
 	LD A,BE_RANGE
 	RET P
 .init_range:
-	LD (IX+0),C
-	LD (IX+1),B
-	LD (IX+2),1
-	LD (IX+8),0
-	LD (IX+9),0
-	LD (IX+10),0x3C
-	LD (IX+11),0
-	LD (IX+12),0
-	LD (IX+13),0
-	LD (IX+15),0x38
+	LD (IX+O_MAXY),C
+	LD (IX+O_MAXX),B
+	LD (IX+O_INMODE),1
+	LD (IX+O_INBUFP),0
+	LD (IX+O_FONT),0
+	LD (IX+O_FONT+1),0x3C
+	LD (IX+O_FONTSTAND),0
+	LD (IX+O_FONTSTAND+1),0
+	LD (IX+O_FONTFMT),0
+	LD (IX+O_ATTR),0x38
 	CALL .multiply8
 	LD A,L
 	AND 7
@@ -68,7 +84,7 @@ F_initscr:
 	LD A,BE_RANGE
 	RET
 .init_range2:
-	LD (IX+14),L
+	LD (IX+O_ADO),L
 	JP F_clear
 
 .global F_clear
@@ -77,7 +93,7 @@ F_clear:
 	OR IXL
 	LD A,BE_INVAL
 	RET Z
-	LD L,(IX+14)
+	LD L,(IX+O_ADO)
 	LD H,0
 	SLA L
 	RL H
@@ -86,7 +102,7 @@ F_clear:
 	SLA L
 	RL H
 	PUSH HL				; ado<<3
-	LD DE,0x10
+	LD DE,O_CHARDATA
 	SBC HL,DE
 	PUSH HL
 	POP BC
@@ -94,7 +110,7 @@ F_clear:
 	PUSH BC				; ldircount
 	PUSH IX
 	POP HL
-	LD DE,0x10
+	LD DE,O_CHARDATA
 	ADD HL,DE
 	PUSH HL				; &chardata
 	POP DE				; ^
@@ -109,7 +125,7 @@ F_clear:
 	PUSH HL
 	POP DE
 	INC DE
-	LD A,(IX+15)
+	LD A,(IX+O_ATTR)
 	LD (HL),A
 	LDIR
 	LD A,0
@@ -124,7 +140,7 @@ F_refresh:
 	LD BC,0
 .refresh_loop:
 	PUSH BC				; {y,x}
-	LD C,(IX+1)
+	LD C,(IX+O_MAXX)
 	CALL .multiply8
 	POP BC				; ={y,x}
 	PUSH BC				; {y,x}
@@ -136,7 +152,7 @@ F_refresh:
 	PUSH HL				; buffer+(y*maxx)+x
 	EX AF,AF'
 	LD H,0
-	LD L,(IX+14)
+	LD L,(IX+O_ADO)
 	ADD HL,HL
 	ADD HL,HL
 	ADD HL,HL
@@ -148,7 +164,7 @@ F_refresh:
 	LD A,(HL)
 	EX AF,AF'
 	POP HL				; =buffer+(y*maxx)+x
-	LD C,0x10
+	LD BC,O_CHARDATA
 	ADD HL,BC
 	LD A,(HL)
 	XOR 0x80
@@ -163,8 +179,8 @@ F_refresh:
 	ADD HL,HL
 	ADD HL,HL
 	ADD HL,HL
-	LD E,(IX+9)
-	LD D,(IX+10)
+	LD E,(IX+O_FONT)
+	LD D,(IX+O_FONT+1)
 	ADD HL,DE
 	PUSH HL
 	LD A,B
@@ -205,12 +221,12 @@ F_refresh:
 .refresh_next:
 	INC C
 	LD A,C
-	CP (IX+1)
+	CP (IX+O_MAXX)
 	JP M,.refresh_loop
 	LD C,0
 	INC B
 	LD A,B
-	CP (IX+0)
+	CP (IX+O_MAXY)
 	JP M,.refresh_loop
 	LD A,0
 	RET
