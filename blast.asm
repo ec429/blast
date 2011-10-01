@@ -170,37 +170,27 @@ F_refresh:
 	OR IXL
 	LD A,BE_INVAL
 	RET Z
-	LD BC,0
-.refresh_loop:
-	PUSH BC				; {y,x}
-	LD C,(IX+O_MAXX)
-	CALL .multiply8
-	POP BC				; ={y,x}
-	PUSH BC				; {y,x}
-	LD B,0
-	ADD HL,BC
 	PUSH IX
-	POP BC
-	ADD HL,BC
-	PUSH HL				; buffer+(y*maxx)+x
-	EX AF,AF'
-	LD L,(IX+O_ADO)
-	LD H,(IX+O_ADO+1)
-	PUSH HL
-	POP BC
-	POP HL				; =buffer+(y*maxx)+x
-	PUSH HL				; buffer+(y*maxx)+x
-	ADD HL,BC
-	LD A,(HL)
-	EX AF,AF'
-	POP HL				; =buffer+(y*maxx)+x
+	POP HL
+	LD E,(IX+O_ADO)
+	LD D,(IX+O_ADO+1)
+	ADD HL,DE
+	EX DE,HL
+	PUSH IX
+	POP HL
 	LD BC,O_CHARDATA
 	ADD HL,BC
+	LD BC,0
+.refresh_loop:
 	LD A,(HL)
 	XOR 0x80
-	POP BC				; ={y,x}
 	JP M, .refresh_next
 	PUSH BC				; {y,x}
+	PUSH DE				; &attrdata[y][x]
+	PUSH HL				; &chardata[y][x]
+	EX AF,AF'
+	LD A,(DE)
+	EX AF,AF'
 	LD (HL),A
 						; paint character: buffer=IX, y=B, x=C, char=A, attr=A'
 						; TODO: test font_fmt and standout
@@ -212,7 +202,7 @@ F_refresh:
 	LD E,(IX+O_FONT)
 	LD D,(IX+O_FONT+1)
 	ADD HL,DE
-	PUSH HL
+	PUSH HL				; &font[char]
 	LD A,B
 	AND 0x18
 	OR 0x40
@@ -225,9 +215,9 @@ F_refresh:
 	SLA A
 	OR C
 	LD L,A
-	POP DE
+	POP DE				; =&font[char]
 	EX DE,HL
-	PUSH DE
+	PUSH DE				; &screen[y][x]
 	SRL D
 	SRL D
 	SRL D
@@ -237,7 +227,7 @@ F_refresh:
 	EX AF,AF'
 	LD (DE),A
 	EX AF,AF'
-	POP DE
+	POP DE				; =&screen[y][x]
 .paint_romfont_loop:
 	LD A,(HL)
 	LD (DE),A
@@ -247,8 +237,12 @@ F_refresh:
 	AND D
 	JR NZ,.paint_romfont_loop
 						; finished painting character
+	POP HL				; &chardata[y][x]
+	POP DE				; &attrdata[y][x]
 	POP BC				; ={y,x}
 .refresh_next:
+	INC HL
+	INC DE
 	INC C
 	LD A,C
 	CP (IX+O_MAXX)
