@@ -23,5 +23,3 @@ SECTIONS
         *(data)
         } > program
 }
-
-

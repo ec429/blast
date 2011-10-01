@@ -46,6 +46,8 @@ F_initscr:
 .init_range:
 	LD (IX+O_MAXY),C
 	LD (IX+O_MAXX),B
+	LD (IX+O_CURY),0
+	LD (IX+O_CURX),0
 	LD (IX+O_INMODE),1
 	LD (IX+O_INBUFP),0
 	LD (IX+O_FONT),0
@@ -58,6 +60,58 @@ F_initscr:
 	LD (IX+O_ADO),L
 	LD (IX+O_ADO+1),H
 	JP F_clear
+
+.global F_addch
+F_addch:
+	OR 0x80
+	LD D,A
+	LD A,IXH
+	OR IXL
+	LD A,BE_INVAL
+	RET Z
+	PUSH DE				; {char,X}
+	LD B,(IX+O_CURY)
+	LD C,(IX+O_CURX)
+	PUSH BC				; {cury,curx}
+	LD C,(IX+O_MAXX)
+	CALL .multiply8
+	POP BC				; ={cury,curx}
+	LD B,0
+	ADD HL,BC
+	PUSH IX
+	POP BC
+	ADD HL,BC
+	PUSH HL				; buffer+(cury*maxx)+curx
+	LD L,(IX+O_ADO)
+	LD H,(IX+O_ADO+1)
+	PUSH HL
+	POP BC
+	POP HL				; =buffer+(cury*maxx)+curx
+	PUSH HL				; buffer+(cury*maxx)+curx
+	ADD HL,BC
+	LD A,(IX+O_ATTR)
+	LD (HL),A
+	POP HL				; =buffer+(cury*maxx)+curx
+	LD BC,O_CHARDATA
+	ADD HL,BC
+	POP DE				; ={char,X}
+	LD (HL),D
+	LD A,(IX+O_CURX)
+	INC A
+	LD (IX+O_CURX),A
+	CP (IX+O_MAXX)
+	RET M
+	LD (IX+O_CURX),0
+	LD A,(IX+O_CURY)
+	INC A
+	LD (IX+O_CURY),A
+	CP (IX+O_MAXY)
+	RET M
+	; TODO: scroll the screen up one line (by calling scroll())
+	DEC A
+	LD (IX+O_CURY),A
+	LD A,0xFF
+	RET
 
 .global F_clear
 F_clear:

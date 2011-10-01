@@ -13,6 +13,7 @@ Calling conventions:
 	in general, indicated by __regname in this documentation.
 	a function may trample /any/ register, so be sure to save the regs you care about on the stack (note: this includes argument registers).
 	exception: void *buffer __IX is never trampled.
+	The linker symbol for an entry point foo is F_foo.
 Return conventions:
 	short: A
 	long: HL
