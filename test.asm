@@ -11,5 +11,12 @@
 	LD B,40
 	CALL F_b_buflen
 	PUSH HL
+	LD IX,0xB000
+	LD A,24
+	LD B,40
+	CALL F_initscr
 	POP BC
+	AND A
+	RET Z
+	LD BC,0xFFFF
 	RET
