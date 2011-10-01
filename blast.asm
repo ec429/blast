@@ -57,6 +57,8 @@ F_initscr:
 	LD (IX+O_FONTFMT),0
 	LD (IX+O_ATTR),0x38
 	CALL .multiply8
+	LD DE,O_CHARDATA
+	ADD HL,DE
 	LD (IX+O_ADO),L
 	LD (IX+O_ADO+1),H
 	JP F_clear

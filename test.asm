@@ -9,7 +9,7 @@
 .global F_main
 	LD IX,0xB000
 	LD A,24
-	LD B,40
+	LD B,32
 	CALL F_initscr
 	LD C,A
 	PUSH BC
