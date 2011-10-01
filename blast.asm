@@ -115,6 +115,95 @@ F_clear:
 	LD A,0
 	RET
 
+.global F_refresh
+F_refresh:
+	LD A,IXH
+	OR IXL
+	LD A,BE_INVAL
+	RET Z
+	LD BC,0
+	PUSH BC				; {y,x}
+	LD C,(IX+1)
+	CALL .multiply8
+	POP BC				; ={y,x}
+	PUSH BC				; {y,x}
+	LD B,0
+	ADD HL,BC
+	PUSH IX
+	POP BC
+	ADD HL,BC
+	PUSH HL				; buffer+(y*maxx)+x
+	EX AF,AF'
+	LD H,0
+	LD L,(IX+14)
+	ADD HL,HL
+	ADD HL,HL
+	ADD HL,HL
+	PUSH HL
+	POP BC
+	POP HL				; =buffer+(y*maxx)+x
+	PUSH HL				; buffer+(y*maxx)+x
+	ADD HL,BC
+	LD A,(HL)
+	EX AF,AF'
+	POP HL				; =buffer+(y*maxx)+x
+	LD C,0x10
+	ADD HL,BC
+	LD A,(HL)
+	XOR 0x80
+	POP BC				; ={y,x}
+	JP M, .refresh_next
+	PUSH BC				; {y,x}
+	LD (HL),A
+						; paint character: buffer=IX, y=B, x=C, char=A, attr=A'
+						; TODO: test font_fmt and standout
+	LD L,A
+	LD H,0
+	ADD HL,HL
+	ADD HL,HL
+	ADD HL,HL
+	LD E,(IX+9)
+	LD D,(IX+10)
+	ADD HL,DE
+	PUSH HL
+	LD A,B
+	AND 0x18
+	OR 0x40
+	LD H,A
+	LD A,B
+	SLA A
+	SLA A
+	SLA A
+	SLA A
+	SLA A
+	OR C
+	LD L,A
+	POP DE
+	EX DE,HL
+	PUSH DE
+	SRL D
+	SRL D
+	SRL D
+	LD A,0x50
+	OR D
+	LD D,A
+	EX AF,AF'
+	LD (DE),A
+	EX AF,AF'
+	POP DE
+.paint_romfont_loop:
+	LD A,(HL)
+	LD (DE),A
+	INC HL
+	INC D
+	LD A,7
+	AND D
+	JR NZ,.paint_romfont_loop
+						; finished painting character
+	POP BC				; ={y,x}
+.refresh_next:
+	RET ; unfinished
+
 .multiply8:				; HL = B * C; uses A,D
 	LD HL,0
 	LD D,0x80

@@ -11,7 +11,8 @@ Calling conventions:
 	struct pointers (i.e. buffer) in IX
 	if too many to fit, then on stack [first, ..., last, return_address]
 	in general, indicated by __regname in this documentation.
-	a function may trample /any/ register, so be sure to save the regs you care about on the stack (note: this includes argument registers)
+	a function may trample /any/ register, so be sure to save the regs you care about on the stack (note: this includes argument registers).
+	exception: void *buffer __IX is never trampled.
 Return conventions:
 	short: A
 	long: HL
@@ -38,7 +39,7 @@ short setfont(void *buffer __IX, void *fontdata __DE, short options __A)
 	options consists of flags which may be bitwise ORed together (except that only one BFF_format may be used):
 		0x00	BFF_ROMFONT		Use the ROM font format (this is the default).
 		0x01	BFF_TRUEFONT	Use Andrew Owen's TrueFONT format.
-		0x10	BFO_STANDOUT	Font is to be used for text with the standout attribute set.  (If the columns value does not match that of the non-standout font, returns BE_INVAL).  If fontdata is NULL, generated underlining is used for standout (and columns is ignored).
+		0x10	BFO_STANDOUT	Font is to be used for text with the standout attribute set.  If fontdata is NULL, generated standout is used.
 		(more formats and options may be added later).
 	BE_INVAL: buffer==NULL, or bad arguments.
 	BE_BADB: bad (corrupted?) buffer.
@@ -91,7 +92,7 @@ short erase(void *buffer __IX)
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
 short clear(void *buffer __IX)
-	Like erase followed by clearok.
+	Like erase followed by clearok (makes certain optimisations possible).
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
 short clrtobot(void *buffer __IX)
@@ -168,7 +169,7 @@ attron() values:
 	otherwise BE_ATTR
 attr_off(any ink colour) sets black ink
 attr_off(any paper colour) sets white paper
-It is an implementation detail whether standout is done by flash or by a modified font (eg. bold, or underline).
+It is an implementation detail whether generated-standout is done by flash or by a modified font (eg. bold, or underline).
 attrset() and attrget() use SBPPPIII (that is, like a Spectrum attribute byte but with standout in place of flash).
 initscr() sets attributes to ink 0, paper 7, bright 0, standout 0 (that is, attrset(0x38)).
 
