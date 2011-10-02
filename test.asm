@@ -11,15 +11,22 @@
 	LD A,24
 	LD B,32
 	CALL F_initscr
-	LD C,A
-	PUSH BC
 	LD A,'a'
 	CALL F_addch
 	LD A,'b'
 	CALL F_addch
 	LD A,'c'
 	CALL F_addch
+	LD BC,0x0100
+	CALL F_move
+	LD DE,STR_hello
+	CALL F_addstr
+	LD C,A
+	PUSH BC
 	CALL F_refresh
 	POP BC
 	LD B,A
 	RET
+
+.data
+STR_hello: .asciz "Hello, world!"

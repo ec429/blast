@@ -102,17 +102,20 @@ F_addch:
 	INC A
 	LD (IX+O_CURX),A
 	CP (IX+O_MAXX)
-	RET M
+	JP M, .addch_ok
 	LD (IX+O_CURX),0
 	LD A,(IX+O_CURY)
 	INC A
 	LD (IX+O_CURY),A
 	CP (IX+O_MAXY)
-	RET M
+	JP M, .addch_ok
 	; TODO: scroll the screen up one line (by calling scroll())
 	DEC A
 	LD (IX+O_CURY),A
 	LD A,0xFF
+	RET
+.addch_ok:
+	LD A,0
 	RET
 
 .global F_mvaddch
@@ -125,6 +128,19 @@ F_mvaddch:
 	RET NZ
 	LD A,D
 	JP F_addch
+
+.global F_addstr
+F_addstr:
+	LD A,(DE)
+	AND A
+	RET Z
+	PUSH DE
+	CALL F_addch
+	POP DE
+	AND A
+	RET NZ
+	INC DE
+	JR F_addstr
 
 .global F_clear
 F_clear:
