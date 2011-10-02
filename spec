@@ -8,9 +8,10 @@ typedef short char;
 Calling conventions:
 	shorts in A,B,C
 	longs in HL,DE,BC
-	struct pointers (i.e. buffer) in IX
+	buffer pointer in IX
 	if too many to fit, then on stack [first, ..., last, return_address]
 	in general, indicated by __regname in this documentation.
+	typically a (y,x) pair will be passed in (B,C)
 	a function may trample /any/ register, so be sure to save the regs you care about on the stack (note: this includes argument registers).
 	exception: void *buffer __IX is never trampled.
 	The linker symbol for an entry point foo is F_foo.
@@ -28,12 +29,12 @@ Notes:
 #define	BE_ATTR		4
 
 Initialisation/option functions:
-long b_buflen(short lines __A, short columns __B)
+long b_buflen(short lines __B, short columns __C)
 	Returns the length (in bytes) of the buffer which initscr() will require.
-short initscr(void *buffer __IX, short lines __A, short columns __B)
+short initscr(void *buffer __IX, short lines __B, short columns __C)
 	Set up blast data area.
 	BE_INVAL: buffer==NULL.
-	BE_RANGE: lines > 24 or lines*columns > 2040.
+	BE_RANGE: lines > 24 or columns > 85.
 	BE_BADB: internal error (should never happen).
 short setfont(void *buffer __IX, void *fontdata __DE, short options __A)
 	Sets buffer to use the supplied font.  Implementations (and third-party fonts) should document the values of columns and opts required for each font to render correctly.  initscr() sets the font address to the Spectrum's 32-column ROM font.

@@ -8,8 +8,8 @@
 .text
 .global F_main
 	LD IX,0xB000
-	LD A,24
-	LD B,32
+	LD B,24
+	LD C,32
 	CALL F_initscr
 	LD A,'a'
 	CALL F_addch

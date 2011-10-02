@@ -23,7 +23,6 @@ O_CHARDATA	equ	0x18
 .text
 .global F_b_buflen
 F_b_buflen:
-	LD C,A
 	CALL .multiply8
 	LD A,L
 	ADD HL,HL
@@ -33,19 +32,20 @@ F_b_buflen:
 
 .global F_initscr
 F_initscr:
-	LD C,A
 	LD A,IXH
 	OR IXL
 	LD A,BE_INVAL
 	RET Z
-.init_inval:
-	LD A,C
+	LD A,B
 	CP 25
 	LD A,BE_RANGE
 	RET P
-.init_range:
-	LD (IX+O_MAXY),C
-	LD (IX+O_MAXX),B
+	LD A,C
+	CP 86
+	LD A,BE_RANGE
+	RET P
+	LD (IX+O_MAXY),B
+	LD (IX+O_MAXX),C
 	LD (IX+O_CURY),0
 	LD (IX+O_CURX),0
 	LD (IX+O_INMODE),1
@@ -63,17 +63,51 @@ F_initscr:
 	LD (IX+O_ADO+1),H
 	JP F_clear
 
+.addch_nl:
+	LD A,0x20
+	CALL F_addch
+	LD A,(IX+O_CURX)
+	AND A
+	RET Z
+	JR .addch_nl
+.addch_tab:
+	LD A,0x20
+	CALL F_addch
+	LD A,(IX+O_CURX)
+	AND 7
+	RET Z
+	JR .addch_tab
+.addch_bs:
+	XOR A
+	DEC (IX+O_CURX)
+	RET P
+	LD (IX+O_CURX),A
+	RET
+
+.addch_ctrl:
+	CP 13
+	JR Z,.addch_nl
+	CP 10
+	JR Z,.addch_nl
+	CP 9
+	JR Z,.addch_tab
+	CP 8
+	JR Z,.addch_bs
+	LD A,0xFF ; TODO handle the rest of them somehow
+	RET
+
 .global F_addch
 F_addch:
-	; TODO: handle non-printing characters, like \n
-	; also \t: --, >>=3, ++, <<=3 will do 8-column tabs
-	OR 0x80
 	LD D,A
 	LD A,IXH
 	OR IXL
 	LD A,BE_INVAL
 	RET Z
-	PUSH DE				; {char,X}
+	LD A,D
+	CP 0x20
+	JP M,.addch_ctrl
+	OR 0x80
+	PUSH AF				; {char,X}
 	LD B,(IX+O_CURY)
 	LD C,(IX+O_CURX)
 	PUSH BC				; {cury,curx}
@@ -98,13 +132,14 @@ F_addch:
 	POP HL				; =buffer+(cury*maxx)+curx
 	LD BC,O_CHARDATA
 	ADD HL,BC
-	POP DE				; ={char,X}
-	LD (HL),D
+	POP AF				; ={char,X}
+	LD (HL),A
 	LD A,(IX+O_CURX)
 	INC A
 	LD (IX+O_CURX),A
 	CP (IX+O_MAXX)
 	JP M, .addch_ok
+.addch_nexty:
 	LD (IX+O_CURX),0
 	LD A,(IX+O_CURY)
 	INC A
@@ -117,7 +152,7 @@ F_addch:
 	LD A,0xFF
 	RET
 .addch_ok:
-	XOR A				; LD A,0
+	XOR A
 	RET
 
 .global F_mvaddch
@@ -188,7 +223,7 @@ F_clear:
 	LD A,(IX+O_ATTR)
 	LD (HL),A
 	LDIR
-	XOR A				; LD A,0
+	XOR A
 	RET
 
 .global F_refresh
@@ -279,7 +314,7 @@ F_refresh:
 	LD A,B
 	CP (IX+O_MAXY)
 	JP M,.refresh_loop
-	XOR A				; LD A,0
+	XOR A
 	RET
 
 .global F_attrset
@@ -290,7 +325,7 @@ F_attrset:
 	LD A,BE_INVAL
 	RET Z
 	LD (IX+O_ATTR),D
-	XOR A				; LD A,0
+	XOR A
 	RET
 
 .global F_attrget
@@ -317,7 +352,7 @@ F_move:
 	RET P
 	LD (IX+O_CURY),B
 	LD (IX+O_CURX),C
-	XOR A				; LD A,0
+	XOR A
 	RET
 
 .multiply8:				; HL = B * C; uses A,D
