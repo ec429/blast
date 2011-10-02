@@ -27,6 +27,7 @@ Notes:
 #define	BE_INVAL	2
 #define	BE_RANGE	3
 #define	BE_ATTR		4
+#define BE_CTRL		5
 
 Initialisation/option functions:
 long b_buflen(short lines __B, short columns __C)
@@ -82,13 +83,27 @@ void input_isv(void *buffer __IX)
 
 Output functions:
 short addch(void *buffer __IX, char ch __A)
-	
+	Puts the character ch at the cursor, which is then advanced.  If the advance is at the right margin, the cursor automatically wraps to the beginning of the next line.  At the bottom margin, the screen is scrolled up one line.  If ch is a tab, newline, or backspace, the cursor is moved appropriately.  Backspace moves the cursor one character left; at the left margin it does nothing.  Newline does a clrtoeol, then moves the cursor to the left margin on the next line, scrolling the screen if on the last line.  Tabs are considered to be at every eighth column.
+	BE_INVAL: buffer==NULL.
+	BE_BADB: bad (corrupted?) buffer.
+	BE_CTRL: unrecognised control character.
 short mvaddch(void *buffer __IX, short y __B, short x __C, char ch __A)
-	
+	Like move followed by addch.
+	BE_INVAL: buffer==NULL.
+	BE_BADB: bad (corrupted?) buffer.
+	BE_RANGE: y or x out of valid range.
+	BE_CTRL: unrecognised control character.
 short addstr(void *buffer __IX, void *str __DE)
-	
+	Writes the characters of the (null-terminated) character string str at the cursor.  It is similar to calling addch once for each character in the string.
+	BE_INVAL: buffer==NULL.
+	BE_BADB: bad (corrupted?) buffer.
+	BE_CTRL: unrecognised control character.
 short mvaddstr(void *buffer __IX, short y __B, short x __C, void *str __DE)
-	
+	Like move followed by addstr.
+	BE_INVAL: buffer==NULL.
+	BE_BADB: bad (corrupted?) buffer.
+	BE_RANGE: y or x out of valid range.
+	BE_CTRL: unrecognised control character.
 short erase(void *buffer __IX)
 	Write blanks to every position in the window (with the currently set attribute).
 	BE_INVAL: buffer==NULL.

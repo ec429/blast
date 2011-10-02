@@ -93,7 +93,7 @@ F_initscr:
 	JR Z,.addch_tab
 	CP 8
 	JR Z,.addch_bs
-	LD A,0xFF ; TODO handle the rest of them somehow
+	LD A,BE_CTRL
 	RET
 
 .global F_addch

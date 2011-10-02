@@ -7,3 +7,4 @@ BE_BADB		equ	1
 BE_INVAL	equ	2
 BE_RANGE	equ	3
 BE_ATTR		equ	4
+BE_CTRL		equ	5
