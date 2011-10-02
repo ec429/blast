@@ -115,7 +115,7 @@ F_addch:
 	LD A,0xFF
 	RET
 .addch_ok:
-	LD A,0
+	XOR A				; LD A,0
 	RET
 
 .global F_mvaddch
@@ -177,7 +177,7 @@ F_clear:
 	LD A,(IX+O_ATTR)
 	LD (HL),A
 	LDIR
-	LD A,0
+	XOR A				; LD A,0
 	RET
 
 .global F_refresh
@@ -268,7 +268,18 @@ F_refresh:
 	LD A,B
 	CP (IX+O_MAXY)
 	JP M,.refresh_loop
-	LD A,0
+	XOR A				; LD A,0
+	RET
+
+.global F_attrset
+F_attrset:
+	LD D,A
+	LD A,IXH
+	OR IXL
+	LD A,BE_INVAL
+	RET Z
+	LD (IX+O_ATTR),D
+	XOR A				; LD A,0
 	RET
 
 .global F_move
@@ -287,7 +298,7 @@ F_move:
 	RET P
 	LD (IX+O_CURY),B
 	LD (IX+O_CURX),C
-	LD A,0
+	XOR A				; LD A,0
 	RET
 
 .multiply8:				; HL = B * C; uses A,D

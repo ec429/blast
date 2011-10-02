@@ -17,6 +17,8 @@
 	CALL F_addch
 	LD A,'c'
 	CALL F_addch
+	LD A,0x57
+	CALL F_attrset
 	LD BC,0x0100
 	CALL F_move
 	LD DE,STR_hello
