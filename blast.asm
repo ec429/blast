@@ -65,6 +65,8 @@ F_initscr:
 
 .global F_addch
 F_addch:
+	; TODO: handle non-printing characters, like \n
+	; also \t: --, >>=3, ++, <<=3 will do 8-column tabs
 	OR 0x80
 	LD D,A
 	LD A,IXH
@@ -141,6 +143,15 @@ F_addstr:
 	RET NZ
 	INC DE
 	JR F_addstr
+
+.global F_mvaddstr
+F_mvaddstr:
+	PUSH DE
+	CALL F_move
+	POP DE
+	AND A
+	RET NZ
+	JP F_addstr
 
 .global F_clear
 F_clear:
@@ -280,6 +291,14 @@ F_attrset:
 	RET Z
 	LD (IX+O_ATTR),D
 	XOR A				; LD A,0
+	RET
+
+.global F_attrget
+F_attrget:
+	LD A,IXH
+	OR IXL
+	RET Z
+	LD A,(IX+O_ATTR)
 	RET
 
 .global F_move

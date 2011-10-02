@@ -20,9 +20,8 @@
 	LD A,0x57
 	CALL F_attrset
 	LD BC,0x0100
-	CALL F_move
 	LD DE,STR_hello
-	CALL F_addstr
+	CALL F_mvaddstr
 	LD C,A
 	PUSH BC
 	CALL F_refresh

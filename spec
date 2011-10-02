@@ -132,7 +132,7 @@ short attron(void *buffer __IX, char attrib __A)
 short attroff(void *buffer __IX, char attrib __A)
 	
 char attrget(void *buffer __IX)
-	Returns the currently set attribute.
+	Returns the currently set attribute.  (If buffer is NULL, returns 0)
 short chgat(void *buffer __IX, short count __A)
 	Changes the attributes of count characters (starting at the cursor) to the currently set attributes.  It does not update the cursor and does not perform wrapping.  A character count of 0xFF means to change attributes all the way to the end of the current line.
 	BE_INVAL: buffer==NULL.
