@@ -23,6 +23,9 @@ Where the return value is used to indicate error conditions, success is indicate
 Notes:
 1.	While an implementation may choose to minimise the amount of painting (except where forced to repaint by clearok()), it is not required to do so; in particular it is permitted to simply repaint the entire screen each time refresh() is called.  Similarly, where optimisation is present, its degree is implementation-defined (for instance an implementation may repaint both the character and its attribute when only one or other has been changed; it may repaint a cell which has been 'changed' to the same character it previously contained; etc).
 
+TO DEFINE:
+	What effect do clear functions (erase(), clear(), clrtoeol(), clrtobot()) have on the cursor?  And what about [r]scroll()?
+
 #define	BE_BADB		1
 #define	BE_INVAL	2
 #define	BE_RANGE	3
@@ -132,7 +135,7 @@ short scroll(void *buffer __IX, signed short count __A)
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
 short rscroll(void *buffer __IX, signed short count __A)
-	refresh()es the screen, then scrolls both the buffer and the screen up count lines.  Use of this function allows certain optimisations which would not be possible if scroll() and then refresh() were called.
+	refresh()es the screen, then scrolls both the buffer and the screen up count lines.  Use of this function allows certain optimisations which would not be possible if scroll() and then refresh() were called (though it may be implemented as such).
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
 short refresh(void *buffer __IX)

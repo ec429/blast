@@ -10,10 +10,6 @@ SECTIONS
 .blast : {
         blast.o
         } > blast
-.isr : {
-        *(.isr)
-        *(isr)
-       } > program
 .text : {
         *(.text)
         *(text)
