@@ -85,13 +85,15 @@ F_initscr:
 	RET
 
 .addch_ctrl:
-	CP 13
+	CP 0xD
 	JR Z,.addch_nl
-	CP 10
+	CP 0xA
 	JR Z,.addch_nl
-	CP 9
+	CP 0x9
 	JR Z,.addch_tab
-	CP 8
+	CP 0x8
+	JR Z,.addch_bs
+	CP 0xC
 	JR Z,.addch_bs
 	LD A,BE_CTRL
 	RET

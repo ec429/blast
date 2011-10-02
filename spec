@@ -63,7 +63,7 @@ short nocbreak(void *buffer __IX, char *linebuf __DE, long linebuflen __BC)
 	BE_BADB: bad (corrupted?) buffer.
 #define noraw(b) nocbreak(b)
 short echo(void *buffer __IX, bool doecho __A)
-	Enables or disables character echoing (has no effect in line mode, wherein characters are always echoed).
+	Enables or disables character echoing (has no effect in line mode, wherein characters are always echoed).  The default after initscr() is no echo.
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
 short delay(void *buffer __IX, long timeout __DE)
@@ -71,7 +71,7 @@ short delay(void *buffer __IX, long timeout __DE)
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
 short nodelay(void *buffer __IX)
-	Sets no-delay mode.
+	Sets no-delay mode.  This is the default after initscr().
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
 
@@ -80,7 +80,7 @@ char getch(void *buffer __IX)
 	Reads a character from the keyboard.  Returns 0 if no input waiting (and, in half-delay mode, timeout reached).
 	For details of return values see "Keymapping", below.
 char *getstr(void *buffer __IX)
-	Reads a line from the keyboard.  Returns NULL if no input waiting (otherwise the address should be within the linebuf supplied by nocbreak()) or if not in nocbreak (line) mode.  Unlike _getch(), does not return mapped keys (instead, function keys are used for line editing); the string returned by getstr() should consist entirely of printable characters (except for the trailing NUL).
+	Reads a line from the keyboard.  Returns NULL if no input waiting (otherwise the address should be within the linebuf supplied by nocbreak()) or if not in nocbreak (line) mode.  Unlike getch(), does not return mapped keys (instead, function keys are used for line editing); the string returned by getstr() should consist entirely of printable characters (except for the trailing NUL).
 void input_isv(void *buffer __IX)
 	Interrupt Service routine to read the keyboard; a call to this function should be placed in your own interrupt service routine.
 
@@ -194,3 +194,39 @@ attrset() and attrget() use SBPPPIII (that is, like a Spectrum attribute byte bu
 initscr() sets attributes to ink 0, paper 7, bright 0, standout 0 (that is, attrset(0x38)).
 
 Keymapping:
+In CBREAK mode, keypresses are decoded according to the current shift state; in RAW mode, keypresses are not so decoded (and shift keys return characters too).  In LINE mode, keypresses are decoded, function keys applied, and tokens expanded; the returned string consists of printable characters and trailing NUL.
+Examples:
+Keypress	RAW				CBREAK		LINE
+a			a				a			a
+caps+a		CS,a,¬CS		A			A
+sym+a		SS,a,¬SS		STOP (0xe2)	S,T,O,P
+ext a		CS,SS,¬CS,¬SS,a	READ (0xe3)	R,E,A,D
+ext sym+a	CS,SS,¬CS,a,¬SS	~ (0x7e)	~
+caps+5		CS,5,¬CS		left (0x8)	<cursor left>
+enter		enter			enter (0xd)	<line enter>
+ext 5		CS,SS,¬CS,¬SS,5	 (0x15)		<discard>			(paper change)
+ext caps+5	SS,CS,¬SS,5,¬CS	 (0x1d)		<discard>			(ink change)
+grf-a		GR,a,¬GR		(A) (0x90)	A
+grf-5		GR,5,¬GR		▐ (0x85)	5
+caps+space	CS, ,¬CS		break (0x5)	<clear input>
+caps		CS,¬CS			<nothing>	<nothing>
+
+Control codes mapping:
+	0x			1x
+x0	nul			paper0
+x1	CS			paper1
+x2	SS			paper2
+x3	EM			paper3
+x4	GR			paper4
+x5	break		paper5
+x6	(unused)	paper6
+x7	edit		paper7
+x8	left		ink0
+x9	right		ink1
+xA	down		ink2
+xB	up			ink3
+xC	delete		ink4
+xD	enter		ink5
+xE	truvid		ink6
+xF	invvid		ink7
+The result of printing a control code other than 08 (backspace), 09 (tab), 0A (newline), 0C (backspace), or 0D (newline) is implementation-defined.
