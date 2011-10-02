@@ -1,0 +1,25 @@
+blast - a curses-alike library for the ZX Spectrum
+	Copyright (c) Edward Cree, 2011 <http://jttlov.no-ip.org>
+	Licensed under GNU GPL v3+; there is NO WARRANTY
+		see <http://www.gnu.org/licenses/gpl.html> or file COPYING
+
+For API reference, see 'spec'.
+For internals documentation (hacking notes), see 'notes'.
+
+Current implementation status:
+ the following functions are (at least partially) implemented:
+	F_b_buflen
+	F_initscr
+	F_addch		# Does not scroll when at bottom margin
+	F_mvaddch	#  "
+	F_addstr	#  "
+	F_mvaddstr	#  "
+	F_clear
+	F_refresh	# Ignores font_fmt and attr.standout
+	F_attrset
+	F_attrget
+	F_move
+
+To compile, you will need a cross-compiling binutils (target=z80-unknown-coff).
+These can be found packaged in the Debian repository as "binutils-z80".
+The fully linked executable is then converted into a .TAP by './maketap'.
