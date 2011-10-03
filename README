@@ -10,6 +10,8 @@ Current implementation status:
  the following functions are (at least partially) implemented:
 	F_b_buflen
 	F_initscr
+	F_getch		# Ignores in_mode, always uses cbreak mode
+	F_input_isv	#  "
 	F_addch		# Does not scroll when at bottom margin
 	F_mvaddch	#  "
 	F_addstr	#  "
