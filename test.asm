@@ -23,9 +23,19 @@
 	LD DE,STR_hello
 	CALL F_mvaddstr
 	CALL F_refresh
+	LD BC,0x0302
+	CALL F_move
+.main_loop:
+	CALL F_input_isv
 	CALL F_getch
+	AND A
+	JR Z,.main_loop
 	LD B,0
 	LD C,A
+	PUSH BC
+	CALL F_addch
+	CALL F_refresh
+	POP BC
 	RET
 
 .data

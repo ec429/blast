@@ -199,34 +199,31 @@ Examples:
 Keypress	RAW				CBREAK		LINE
 a			a				a			a
 caps+a		CS,a,¬CS		A			A
-sym+a		SS,a,¬SS		STOP (0xe2)	S,T,O,P
-ext a		CS,SS,¬CS,¬SS,a	READ (0xe3)	R,E,A,D
-ext sym+a	CS,SS,¬CS,a,¬SS	~ (0x7e)	~
+sym+a		SS,a,¬SS		<discard>	<discard>
+caps+sym+a	CS,SS,a,¬CS,¬SS	~ (0x7e)	~
 caps+5		CS,5,¬CS		left (0x8)	<cursor left>
+sym+5		SS,5,¬SS		%			%
+caps+sym+5	CS,SS,5,¬CS,¬SS	<discard>	<discard>
 enter		enter			enter (0xd)	<line enter>
-ext 5		CS,SS,¬CS,¬SS,5	 (0x15)		<discard>			(paper change)
-ext caps+5	SS,CS,¬SS,5,¬CS	 (0x1d)		<discard>			(ink change)
-grf-a		GR,a,¬GR		(A) (0x90)	A
-grf-5		GR,5,¬GR		▐ (0x85)	5
 caps+space	CS, ,¬CS		break (0x5)	<clear input>
 caps		CS,¬CS			<nothing>	<nothing>
 
 Control codes mapping:
-	0x			1x
-x0	nul			paper0
-x1	CS			paper1
-x2	SS			paper2
-x3	EM			paper3
-x4	GR			paper4
-x5	break		paper5
-x6	(unused)	paper6
-x7	edit		paper7
-x8	left		ink0
-x9	right		ink1
-xA	down		ink2
-xB	up			ink3
-xC	delete		ink4
-xD	enter		ink5
-xE	truvid		ink6
-xF	invvid		ink7
+	0x
+x0	nul
+x1	CS (Caps Shift)
+x2	SS (Symbol Shift)
+x3	EM (Extend Mode)
+x4	CL (Caps Lock)
+x5	GR (Graphics)
+x6	break
+x7	edit
+x8	left
+x9	right
+xA	down
+xB	up
+xC	delete
+xD	enter
+xE	truvid
+xF	invvid
 The result of printing a control code other than 08 (backspace), 09 (tab), 0A (newline), 0C (backspace), or 0D (newline) is implementation-defined.

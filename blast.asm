@@ -13,12 +13,13 @@ O_INMODE	equ	4
 O_INTM		equ	5
 O_INBUFP	equ	7
 O_INBUF		equ	8
-O_ADO		equ	0x10
+O_INLASTSCN	equ	0x10
 O_FONT		equ	0x12
 O_FONTSTAND	equ	0x14
 O_FONTFMT	equ	0x16
 O_ATTR		equ	0x17
-O_CHARDATA	equ	0x18
+O_ADO		equ	0x18
+O_CHARDATA	equ	0x20
 
 .text
 .global F_b_buflen
@@ -128,26 +129,93 @@ F_input_isv:
 	RLCA
 	XOR E
 	RET Z
-	LD E,0
 	LD C,0xFE
 	LD B,0x7F			; we need the shift state (symbol shift)
 	IN A,(C)
 	AND 2
 	XOR 2
-	LD E,A				; E is now 2 if sym shift pressed, else 0
+	LD D,A				; D is now 2 if sym shift pressed, else 0
 	LD B,C
 .input_isv_loop:
 	IN A,(C)
 	AND 0x1f
 	XOR 0x1f
-	JR Z, .input_isv_next
-	; convert the character and store it
+	JR Z,.input_isv_next
+	LD E,A
+	LD A,B
+	CP C
+	JR NZ,.input_isv_ss
+	LD A,E
+	AND 1
+	BIT 7,(IX+O_INBUFP)
+	JR Z,.input_isv_not_cl
+	XOR 1
+.input_isv_not_cl:
+	OR D
+	LD D,A				; D is now (2:sym shift)|(1:caps shift^caps lock)
+	LD A,0x1e
+	AND E
+	JR Z,.input_isv_next
+	LD E,A
+	JR .input_isv_what
+.input_isv_ss:
+	CP 0x7F
+	JR NZ,.input_isv_what
+	LD A,0x1d			; 00011101
+	AND E
+	JR Z,.input_isv_next
+	LD E,A
+.input_isv_what:
+	LD A,0xff
+.input_isv_column:
+	INC A
+	SRL E
+	JR NC,.input_isv_column
+	RRCA
+	RRCA
+	RRCA
+	LD E,A
+	LD A,0xff
+.input_isv_row:
+	INC A
+	SRL B
+	JR C,.input_isv_row
+	OR E
+	LD E,A
+	LD A,(IX+O_INLASTSCN)
+	AND 0xe7
+	XOR E
+	RET Z
+	LD A,E
+	LD (IX+O_INLASTSCN),A
+	RLC D
+	RLC D
+	RLC D
+	OR D
+	LD C,A
+	LD B,0
+	LD HL,.table_cbreak
+	ADD HL,BC
+	LD A,(HL)
+	CP 5
+	JP M,.input_isv_discard
+	JR NZ,.input_isv_storech
+	LD A,(IX+O_INBUFP)
+	XOR 0x80
+	LD (IX+O_INBUFP),A
+	LD A,5
+	JR .input_isv_storech
+.input_isv_discard:
+	XOR A
+	RET
 .input_isv_next:
 	SCF
 	RL B
-	RET NC
-	JR .input_isv_loop
+	JR C,.input_isv_loop
+	LD (IX+O_INLASTSCN),0
+	RET
 .input_isv_storech:
+	LD E,A
 	LD A,(IX+O_INBUFP)
 	LD D,A
 	AND 7
@@ -480,3 +548,31 @@ F_move:
 	SLA L
 	RL H
 	JR .mult8_loop
+
+.data
+.table_cbreak:
+	; column 0
+.byte 0x1,'a','q','1','0','p',0xd,' '
+.byte 0x1,'A','Q',0x7,0xC,'P',0xd,0x6
+.byte 0x3, 0 , 0 ,'!','-','"',0xd,' '
+.byte 0x1,'~', 0 , 0 , 0,0x7f,0xd,' '
+	; column 1
+.byte 'z','s','w','2','9','o','l',0x2
+.byte 'Z','S','W',0x4,0x5,'O','L',0x3
+.byte ':', 0 , 0 ,'@',')',';','=',0x2
+.byte  0 ,'|', 0 , 0 , 0 , 0 , 0 ,0x2
+	; column 2
+.byte 'x','d','e','3','8','i','k','m'
+.byte 'X','D','E',0xe,0x9,'I','K','M'
+.byte 0x60,0 , 0 ,'#','(', 0 ,'+','.'
+.byte  0,0x5c, 0 , 0 , 0 , 0 , 0 , 0
+	; column 3
+.byte 'c','f','r','4','7','u','j','n'
+.byte 'C','F','R',0xf,0xb,'U','J','N'
+.byte '?', 0 ,'<','$',0x27,0 ,'-',','
+.byte  0 ,'{', 0 , 0 , 0 , 0 , 0 , 0
+	; column 4
+.byte 'v','g','t','5','6','y','h','b'
+.byte 'V','G','T',0x8,0xA,'Y','H','B'
+.byte '/', 0 ,'>','%','&', 0 ,'^','*'
+.byte  0 ,'}', 0 , 0 , 0 , 0 , 0 , 0
