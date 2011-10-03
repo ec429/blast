@@ -82,6 +82,14 @@ F_getch:
 	RET Z
 	XOR E
 	LD D,A
+	DI
+	LD A,(IX+O_INBUFP)
+	CP B
+	JR Z,.getch_cont
+	EI
+	JR F_getch
+.getch_cont:
+	LD A,D
 	ADD A,O_INBUF
 	LD C,A
 	LD B,0
@@ -98,6 +106,66 @@ F_getch:
 	OR E
 	LD (IX+O_INBUFP),A
 	LD A,(HL)
+	EI
+	RET
+
+.global F_input_isv
+F_input_isv:
+	LD A,IXH
+	OR IXL
+	SCF
+	RET Z
+	LD A,(IX+O_INBUFP)
+	LD B,A
+	INC A
+	AND 7
+	LD E,A
+	LD A,B
+	AND 0x70
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	XOR E
+	RET Z
+	LD E,0
+	LD C,0xFE
+	LD B,0x7F			; we need the shift state (symbol shift)
+	IN A,(C)
+	AND 2
+	XOR 2
+	LD E,A				; E is now 2 if sym shift pressed, else 0
+	LD B,C
+.input_isv_loop:
+	IN A,(C)
+	AND 0x1f
+	XOR 0x1f
+	JR Z, .input_isv_next
+	; convert the character and store it
+.input_isv_next:
+	SCF
+	RL B
+	RET NC
+	JR .input_isv_loop
+.input_isv_storech:
+	LD A,(IX+O_INBUFP)
+	LD D,A
+	AND 7
+	ADD A,O_INBUF
+	LD C,A
+	LD B,0
+	PUSH IX
+	POP HL
+	ADD HL,BC
+	LD (HL),E
+	LD A,D
+	INC A
+	AND 7
+	LD E,A
+	LD A,D
+	AND 0x70
+	OR E
+	LD (IX+O_INBUFP),A
 	RET
 
 .addch_nl:
