@@ -64,6 +64,29 @@ F_initscr:
 	LD (IX+O_ADO+1),H
 	JP F_clear
 
+.global F_raw
+F_raw:
+	LD A,IXH
+	OR IXL
+	RET Z
+	LD A,(IX+O_INMODE)
+	AND 0xFC
+	LD (IX+O_INMODE),A
+	XOR A
+	RET
+
+.global F_cbreak
+F_cbreak:
+	LD A,IXH
+	OR IXL
+	RET Z
+	LD A,(IX+O_INMODE)
+	AND 0xFC
+	INC A
+	LD (IX+O_INMODE),A
+	XOR A
+	RET
+
 .global F_getch
 F_getch:
 	LD A,IXH

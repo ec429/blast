@@ -25,6 +25,7 @@
 	CALL F_refresh
 	LD BC,0x0302
 	CALL F_move
+	CALL F_raw
 	DI
 	LD A,I
 	PUSH AF
