@@ -143,7 +143,7 @@ F_input_isv:
 	IN A,(C)
 	AND 0x1f
 	XOR 0x1f
-	JR Z,.input_isv_next
+	JP Z,.input_isv_next
 	LD E,A
 	LD A,B
 	CP C
@@ -151,10 +151,10 @@ F_input_isv:
 	LD A,E
 	AND 1
 	OR D
-	LD D,A				; D is now (2:sym shift)|(1:caps shift^caps lock)
+	LD D,A				; D is now (2:sym shift)|(1:caps shift)
 	LD A,0x1e
 	AND E
-	JR Z,.input_isv_next
+	JP Z,.input_isv_next
 	LD E,A
 	JR .input_isv_what
 .input_isv_ss:
@@ -162,14 +162,14 @@ F_input_isv:
 	JR NZ,.input_isv_what
 	LD A,0x1d			; 00011101
 	AND E
-	JR Z,.input_isv_next
+	JP Z,.input_isv_next
 	LD E,A
 .input_isv_what:
 	BIT 7,(IX+O_INBUFP)
 	JR Z,.input_isv_not_cl
 	LD A,D
 	XOR 1
-	LD D,A
+	LD D,A				; D is now (2:sym shift)|(1:caps shift^caps lock)
 .input_isv_not_cl:
 	LD A,0xff
 .input_isv_column:
@@ -191,8 +191,38 @@ F_input_isv:
 	AND 0xe7
 	XOR E
 	RET Z
+	LD (IX+O_INLASTSCN),E
+	BIT 0,(IX+O_INMODE)
+	JR NZ,.input_isv_cbreak
+	LD A,D
+	AND 3
+	LD L,A
+	JR Z,.input_isv_raw
+	LD A,(IX+O_INBUFP)
+	LD B,A
+	INC A
+	INC A
+	AND 7
+	LD D,A
+	LD A,B
+	AND 0x70
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	XOR D
+	RET Z
+	LD A,L
+	CALL .input_isv_storech
+.input_isv_raw:
+	LD C,E
+	LD B,0
+	LD HL,.table_cbreak
+	ADD HL,BC
+	LD A,(HL)
+	JR .input_isv_storech
+.input_isv_cbreak:
 	LD A,E
-	LD (IX+O_INLASTSCN),A
 	RLC D
 	RLC D
 	RLC D
@@ -221,7 +251,7 @@ F_input_isv:
 .input_isv_next:
 	SCF
 	RL B
-	JR C,.input_isv_loop
+	JP C,.input_isv_loop
 	LD (IX+O_INLASTSCN),0
 	RET
 .input_isv_storech:
@@ -580,9 +610,9 @@ F_move:
 .byte 'c','f','r','4','7','u','j','n'
 .byte 'C','F','R',0xf,0xb,'U','J','N'
 .byte '?', 0 ,'<','$',0x27,0 ,'-',','
-.byte  0 ,'{', 0 , 0 , 0 , 0 , 0 , 0
+.byte  0 ,'{', 0 , 0 , 0 ,']', 0 , 0
 	; column 4
 .byte 'v','g','t','5','6','y','h','b'
 .byte 'V','G','T',0x8,0xA,'Y','H','B'
 .byte '/', 0 ,'>','%','&', 0 ,'^','*'
-.byte  0 ,'}', 0 , 0 , 0 , 0 , 0 , 0
+.byte  0 ,'}', 0 , 0 , 0 ,'[', 0 , 0

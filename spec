@@ -194,19 +194,19 @@ attrset() and attrget() use SBPPPIII (that is, like a Spectrum attribute byte bu
 initscr() sets attributes to ink 0, paper 7, bright 0, standout 0 (that is, attrset(0x38)).
 
 Keymapping:
-In CBREAK mode, keypresses are decoded according to the current shift state; in RAW mode, keypresses are not so decoded (and shift keys return characters too).  In LINE mode, keypresses are decoded, function keys applied, and tokens expanded; the returned string consists of printable characters and trailing NUL.
+In CBREAK mode, keypresses are decoded according to the current shift state; in RAW mode, keypresses are instead prefixed with the shift state.  In LINE mode, keypresses are decoded, function keys applied, and tokens expanded; the returned string consists of printable characters and trailing NUL.
 Examples:
-Keypress	RAW				CBREAK		LINE
-a			a				a			a
-caps+a		CS,a,¬CS		A			A
-sym+a		SS,a,¬SS		<discard>	<discard>
-caps+sym+a	CS,SS,a,¬CS,¬SS	~ (0x7e)	~
-caps+5		CS,5,¬CS		left (0x8)	<cursor left>
-sym+5		SS,5,¬SS		%			%
-caps+sym+5	CS,SS,5,¬CS,¬SS	<discard>	<discard>
-enter		enter			enter (0xd)	<line enter>
-caps+space	CS, ,¬CS		break (0x5)	<clear input>
-caps		CS,¬CS			<nothing>	<nothing>
+Keypress	RAW			CBREAK		LINE
+a			a			a			a
+caps+a		CS,a		A			A
+sym+a		SS,a		<discard>	<discard>
+caps+sym+a	EM,a		~ (0x7e)	~
+caps+5		CS,5		left (0x8)	<cursor left>
+sym+5		SS,5		%			%
+caps+sym+5	EM,5		<discard>	<discard>
+enter		enter		enter (0xd)	<line enter>
+caps+space	CS, 		break (0x5)	<clear input>
+caps		<nothing>	<nothing>	<nothing>
 
 Control codes mapping:
 	0x
