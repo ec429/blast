@@ -15,8 +15,9 @@ maketap: maketap.c
 	$(CC) $(CFLAGS) -o $@ $<
 
 test.tap: test maketap test_bas.tap
-	cp test_bas.tap test.tap
-	./maketap --org=32768 < test >> test.tap
+	./maketap --org=32768 "<test" ">test_bin.tap"
+	cat test_bas.tap test_bin.tap > test.tap
+	-rm test_bin.tap
 
 test: test.o $(OBJS) blast.ld
 	$(LD) -o $@ $(OBJS) $< $(LDFLAGS)
