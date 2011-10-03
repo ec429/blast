@@ -25,19 +25,45 @@
 	CALL F_refresh
 	LD BC,0x0302
 	CALL F_move
+	DI
+	LD A,I
+	PUSH AF
+	LD BC,.isv_table
+	LD A,B
+	LD I,A
+	EI
+	IM 2
 .main_loop:
-	CALL F_input_isv
 	CALL F_getch
 	AND A
 	JR Z,.main_loop
-	LD B,0
-	LD C,A
-;	PUSH BC
 	CALL F_addch
 	CALL F_refresh
 	JR .main_loop
-;	POP BC
+	DI
+	POP AF
+	LD I,A
+	IM 1
+	EI
+	LD BC,0
 	RET
 
+.section isr
+.skip 0xAC
+.isr:
+	PUSH AF
+	PUSH IX
+	EXX
+	LD IX,0xB000
+	CALL F_input_isv
+	EXX
+	POP IX
+	POP AF
+	EI
+	RETI
+
 .data
+.balign 0x100
+.isv_table:
+.fill 257,1,0xAC
 STR_hello: .asciz "Hello, world!"
