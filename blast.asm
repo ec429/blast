@@ -90,6 +90,9 @@ F_getch:
 	EI
 	JR F_getch
 .getch_cont:
+	AND 0x80
+	OR E
+	LD E,A
 	LD A,D
 	ADD A,O_INBUF
 	LD C,A
@@ -147,10 +150,6 @@ F_input_isv:
 	JR NZ,.input_isv_ss
 	LD A,E
 	AND 1
-	BIT 7,(IX+O_INBUFP)
-	JR Z,.input_isv_not_cl
-	XOR 1
-.input_isv_not_cl:
 	OR D
 	LD D,A				; D is now (2:sym shift)|(1:caps shift^caps lock)
 	LD A,0x1e
@@ -166,6 +165,12 @@ F_input_isv:
 	JR Z,.input_isv_next
 	LD E,A
 .input_isv_what:
+	BIT 7,(IX+O_INBUFP)
+	JR Z,.input_isv_not_cl
+	LD A,D
+	XOR 1
+	LD D,A
+.input_isv_not_cl:
 	LD A,0xff
 .input_isv_column:
 	INC A
@@ -197,14 +202,19 @@ F_input_isv:
 	LD HL,.table_cbreak
 	ADD HL,BC
 	LD A,(HL)
-	CP 5
+	BIT 7,(IX+O_INBUFP)
+	JR Z,.input_isv_cl
+	CP '2'
+	JR NZ,.input_isv_cl
+	LD A,4
+.input_isv_cl:
+	CP 4
 	JP M,.input_isv_discard
 	JR NZ,.input_isv_storech
 	LD A,(IX+O_INBUFP)
 	XOR 0x80
 	LD (IX+O_INBUFP),A
-	LD A,5
-	JR .input_isv_storech
+	RET
 .input_isv_discard:
 	XOR A
 	RET
@@ -231,7 +241,7 @@ F_input_isv:
 	AND 7
 	LD E,A
 	LD A,D
-	AND 0x70
+	AND 0xf0
 	OR E
 	LD (IX+O_INBUFP),A
 	RET

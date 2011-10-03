@@ -32,10 +32,11 @@
 	JR Z,.main_loop
 	LD B,0
 	LD C,A
-	PUSH BC
+;	PUSH BC
 	CALL F_addch
 	CALL F_refresh
-	POP BC
+	JR .main_loop
+;	POP BC
 	RET
 
 .data
