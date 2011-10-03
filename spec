@@ -77,7 +77,7 @@ short nodelay(void *buffer __IX)
 
 Input functions:
 char getch(void *buffer __IX)
-	Reads a character from the keyboard.  Returns 0 if no input waiting (and, in half-delay mode, timeout reached).
+	Reads a character from the keyboard.  Returns 0 if no input waiting (and, in half-delay mode, timeout reached) or if buffer is NULL.
 	For details of return values see "Keymapping", below.
 char *getstr(void *buffer __IX)
 	Reads a line from the keyboard.  Returns NULL if no input waiting (otherwise the address should be within the linebuf supplied by nocbreak()) or if not in nocbreak (line) mode.  Unlike getch(), does not return mapped keys (instead, function keys are used for line editing); the string returned by getstr() should consist entirely of printable characters (except for the trailing NUL).

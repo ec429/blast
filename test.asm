@@ -22,11 +22,10 @@
 	LD BC,0x0100
 	LD DE,STR_hello
 	CALL F_mvaddstr
-	LD C,A
-	PUSH BC
 	CALL F_refresh
-	POP BC
-	LD B,A
+	CALL F_getch
+	LD B,0
+	LD C,A
 	RET
 
 .data

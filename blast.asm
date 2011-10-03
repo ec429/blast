@@ -63,6 +63,43 @@ F_initscr:
 	LD (IX+O_ADO+1),H
 	JP F_clear
 
+.global F_getch
+F_getch:
+	LD A,IXH
+	OR IXL
+	RET Z
+	LD A,(IX+O_INBUFP)
+	LD B,A
+	AND 7
+	LD E,A
+	LD A,B
+	AND 0x70
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	XOR E
+	RET Z
+	XOR E
+	LD D,A
+	ADD A,O_INBUF
+	LD C,A
+	LD B,0
+	PUSH IX
+	POP HL
+	ADD HL,BC
+	LD A,D
+	INC A
+	AND 7
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	OR E
+	LD (IX+O_INBUFP),A
+	LD A,(HL)
+	RET
+
 .addch_nl:
 	LD A,0x20
 	CALL F_addch
