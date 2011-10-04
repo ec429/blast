@@ -10,7 +10,7 @@ Current implementation status:
  the following functions are (at least partially) implemented:
 	F_b_buflen
 	F_initscr
-	F_raw		# raw mode is currently broken
+	F_raw
 	F_cbreak
 	F_getch		# nodelay only
 	F_input_isv

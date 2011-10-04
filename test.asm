@@ -38,8 +38,18 @@
 	CALL F_getch
 	AND A
 	JR Z,.main_loop
+	LD E,A
+	AND 0xe0
+	LD A,E
+	JR NZ,.main_print
+	CALL F_attrset
+	JR .main_loop
+.main_print:
+	LD A,E
 	CALL F_addch
 	CALL F_refresh
+	LD A,0x57
+	CALL F_attrset
 	JR .main_loop
 	DI
 	POP AF

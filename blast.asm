@@ -69,9 +69,7 @@ F_raw:
 	LD A,IXH
 	OR IXL
 	RET Z
-	LD A,(IX+O_INMODE)
-	AND 0xFC
-	LD (IX+O_INMODE),A
+	RES 0,(IX+O_INMODE)
 	XOR A
 	RET
 
@@ -80,10 +78,7 @@ F_cbreak:
 	LD A,IXH
 	OR IXL
 	RET Z
-	LD A,(IX+O_INMODE)
-	AND 0xFC
-	INC A
-	LD (IX+O_INMODE),A
+	SET 0,(IX+O_INMODE)
 	XOR A
 	RET
 
@@ -238,7 +233,9 @@ F_input_isv:
 	LD A,L
 	CALL .input_isv_storech
 .input_isv_raw:
-	LD C,E
+	LD A,(IX+O_INLASTSCN)
+	AND 0xe7
+	LD C,A
 	LD B,0
 	LD HL,.table_cbreak
 	ADD HL,BC
