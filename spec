@@ -1,7 +1,7 @@
 blast - like curses
 
-sizeof(short)==8; sizeof(long)==16.  Both are unsigned by default.
-sizeof(foo *)==16 forall foo, of course.
+sizeof(short)==1; sizeof(long)==2.  Both are unsigned by default.
+sizeof(foo *)==2 forall foo, of course.
 typedef short bool;
 typedef short int;
 typedef short char;
@@ -57,15 +57,6 @@ short cbreak(void *buffer __IX)
 	Puts buffer into cbreak (half-cooked) input mode.  This is the default after initscr().
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
-short nocbreak(void *buffer __IX, char *linebuf __DE, long linebuflen __BC)
-	Puts buffer into nocbreak (line, "cooked") input mode.  In line mode the bottom row of the screen is reserved for line input.
-	BE_INVAL: buffer==NULL.
-	BE_BADB: bad (corrupted?) buffer.
-#define noraw(b) nocbreak(b)
-short echo(void *buffer __IX, bool doecho __A)
-	Enables or disables character echoing (has no effect in line mode, wherein characters are always echoed).  The default after initscr() is no echo.
-	BE_INVAL: buffer==NULL.
-	BE_BADB: bad (corrupted?) buffer.
 short delay(void *buffer __IX, long timeout __DE)
 	Sets delay mode if timeout==0, else half-delay mode.
 	BE_INVAL: buffer==NULL.
@@ -79,8 +70,6 @@ Input functions:
 char getch(void *buffer __IX)
 	Reads a character from the keyboard.  Returns 0 if no input waiting (and, in half-delay mode, timeout reached) or if buffer is NULL.
 	For details of return values see "Keymapping", below.
-char *getstr(void *buffer __IX)
-	Reads a line from the keyboard.  Returns NULL if no input waiting (otherwise the address should be within the linebuf supplied by nocbreak()) or if not in nocbreak (line) mode.  Unlike getch(), does not return mapped keys (instead, function keys are used for line editing); the string returned by getstr() should consist entirely of printable characters (except for the trailing NUL).
 void input_isv(void *buffer __IX)
 	Interrupt Service routine to read the keyboard; a call to this function should be placed in your own interrupt service routine.
 
@@ -194,19 +183,19 @@ attrset() and attrget() use SBPPPIII (that is, like a Spectrum attribute byte bu
 initscr() sets attributes to ink 0, paper 7, bright 0, standout 0 (that is, attrset(0x38)).
 
 Keymapping:
-In CBREAK mode, keypresses are decoded according to the current shift state; in RAW mode, keypresses are instead prefixed with the shift state.  In LINE mode, keypresses are decoded, function keys applied, and tokens expanded; the returned string consists of printable characters and trailing NUL.
+In CBREAK mode, keypresses are decoded according to the current shift state; in RAW mode, keypresses are instead prefixed with the shift state.
 Examples:
-Keypress	RAW			CBREAK		LINE
-a			a			a			a
-caps+a		CS,a		A			A
-sym+a		SS,a		<discard>	<discard>
-caps+sym+a	EM,a		~ (0x7e)	~
-caps+5		CS,5		left (0x8)	<cursor left>
-sym+5		SS,5		%			%
-caps+sym+5	EM,5		<discard>	<discard>
-enter		enter		enter (0xd)	<line enter>
-caps+space	CS, 		break (0x5)	<clear input>
-caps		<nothing>	<nothing>	<nothing>
+Keypress	RAW			CBREAK
+a			a			a
+caps+a		CS,a		A
+sym+a		SS,a		<discard>
+caps+sym+a	EM,a		~ (0x7e)
+caps+5		CS,5		left (0x8)
+sym+5		SS,5		%
+caps+sym+5	EM,5		<discard>
+enter		enter		enter (0xd)
+caps+space	CS, 		break (0x5)
+caps		<nothing>	<nothing>
 
 Control codes mapping:
 	0x

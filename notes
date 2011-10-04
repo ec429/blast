@@ -8,10 +8,10 @@ Layout of buffer:
 001		maxx: short
 002		cury: short
 003		curx: short
-004		in_mode: short: (0=RAW 1=CBREAK 2=NOCBREAK (line)) | (4=ECHO) | (8=DELAY)
-005		in_tm: long: half-delay timeout, if in_mode&8; else ignored
+004		in_mode: short: (0=RAW 1=CBREAK) | (2=DELAY)
+005		in_tm: long: half-delay timeout, if in_mode&2; else ignored
 007		in_buf_p: short: bits 2:0 are the write index for input_isv(), bits 6:4 are the read index for getch() and friends, bit 7 is current caps lock state
-008		in_buf: array of 8 char (if in_mode&3==NOCBREAK, then in_buf[1:0] is a pointer; in_buf[3:2] is the buffer length).  The buffer is circular (if input_isv() wants to write, and the buffer's full, it should beep())
+008		in_buf: array of 8 char.  The buffer is circular (if input_isv() wants to write, and the buffer's full, it should beep())
 010		in_last_scan: short: the last scancode read
 011		(unused)
 012		font: void *

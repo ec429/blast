@@ -12,8 +12,8 @@ Current implementation status:
 	F_initscr
 	F_raw		# raw mode is currently broken
 	F_cbreak
-	F_getch		# Only supports raw and cbreak, nodelay, noecho
-	F_input_isv	#  "
+	F_getch		# nodelay only
+	F_input_isv
 	F_addch		# Does not scroll when at bottom margin
 	F_mvaddch	#  "
 	F_addstr	#  "
