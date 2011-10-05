@@ -8,3 +8,7 @@ BE_INVAL	equ	2
 BE_RANGE	equ	3
 BE_ATTR		equ	4
 BE_CTRL		equ	5
+
+BFF_ROMFONT		equ	0x00
+BFF_TRUEFONT	equ	0x01
+BFO_STANDOUT	equ	0x10

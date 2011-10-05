@@ -64,10 +64,49 @@ F_initscr:
 	LD (IX+O_ADO+1),H
 	JP F_clear
 
+.global F_setfont
+F_setfont:
+	LD C,A
+	LD A,IXH
+	OR IXL
+	LD A,BE_INVAL
+	RET Z
+	LD A,BFO_STANDOUT
+	AND C
+	JR NZ,.setfont_stand
+	LD (IX+O_FONT),E
+	LD (IX+O_FONT+1),D
+	LD A,(IX+O_FONTFMT)
+	AND 0xf0
+	LD B,A
+	LD A,C
+	AND 0x0f
+	OR B
+	LD (IX+O_FONTFMT),A
+	XOR A
+	RET
+.setfont_stand:
+	LD (IX+O_FONTSTAND),E
+	LD (IX+O_FONTSTAND+1),D
+	LD A,(IX+O_FONTFMT)
+	AND 0x0f
+	LD B,A
+	LD A,C
+	AND 0x0f
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	OR B
+	LD (IX+O_FONTFMT),A
+	XOR A
+	RET
+
 .global F_raw
 F_raw:
 	LD A,IXH
 	OR IXL
+	LD A,BE_INVAL
 	RET Z
 	RES 0,(IX+O_INMODE)
 	XOR A
@@ -77,6 +116,7 @@ F_raw:
 F_cbreak:
 	LD A,IXH
 	OR IXL
+	LD A,BE_INVAL
 	RET Z
 	SET 0,(IX+O_INMODE)
 	XOR A
@@ -588,6 +628,42 @@ F_move:
 	LD (IX+O_CURY),B
 	LD (IX+O_CURX),C
 	XOR A
+	RET
+
+.global F_getcury
+F_getcury:
+	LD A,IXH
+	OR IXL
+	LD A,0xFF
+	RET Z
+	LD A,(IX+O_CURY)
+	RET
+
+.global F_getcurx
+F_getcurx:
+	LD A,IXH
+	OR IXL
+	LD A,0xFF
+	RET Z
+	LD A,(IX+O_CURX)
+	RET
+
+.global F_getmaxy
+F_getmaxy:
+	LD A,IXH
+	OR IXL
+	LD A,0xFF
+	RET Z
+	LD A,(IX+O_MAXY)
+	RET
+
+.global F_getmaxx
+F_getmaxx:
+	LD A,IXH
+	OR IXL
+	LD A,0xFF
+	RET Z
+	LD A,(IX+O_MAXX)
 	RET
 
 .multiply8:				; HL = B * C; uses A,D

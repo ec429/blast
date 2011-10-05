@@ -41,7 +41,7 @@ short initscr(void *buffer __IX, short lines __B, short columns __C)
 	BE_RANGE: lines > 24 or columns > 85.
 	BE_BADB: internal error (should never happen).
 short setfont(void *buffer __IX, void *fontdata __DE, short options __A)
-	Sets buffer to use the supplied font.  Implementations (and third-party fonts) should document the values of columns and opts required for each font to render correctly.  initscr() sets the font address to the Spectrum's 32-column ROM font.
+	Sets buffer to use the supplied font.  Implementations (and third-party fonts) should document the values of columns and opts required for each font to render correctly.  initscr() sets the font address to the Spectrum's 32-column ROM font (and standout font to NULL).
 	options consists of flags which may be bitwise ORed together (except that only one BFF_format may be used):
 		0x00	BFF_ROMFONT		Use the ROM font format (this is the default).
 		0x01	BFF_TRUEFONT	Use Andrew Owen's TrueFONT format.

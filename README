@@ -10,6 +10,7 @@ Current implementation status:
  the following functions are (at least partially) implemented:
 	F_b_buflen
 	F_initscr
+	F_setfont
 	F_raw
 	F_cbreak
 	F_getch		# nodelay only
@@ -23,6 +24,10 @@ Current implementation status:
 	F_attrset
 	F_attrget
 	F_move
+	F_getcury
+	F_getcurx
+	F_getmaxy
+	F_getmaxx
 
 To compile, you will need a cross-compiling binutils (target=z80-unknown-coff).
 These can be found packaged in the Debian repository as "binutils-z80".
