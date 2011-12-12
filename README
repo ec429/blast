@@ -13,9 +13,9 @@ Current implementation status:
 	F_setfont
 	F_raw
 	F_cbreak
-	F_delay		# setting is ignored by F_getch
+	F_delay
 	F_nodelay
-	F_getch		# nodelay only
+	F_getch
 	F_input_isv
 	F_addch		# Does not scroll when at bottom margin
 	F_mvaddch	#  "

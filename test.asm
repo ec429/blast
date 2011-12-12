@@ -25,7 +25,9 @@
 	CALL F_refresh
 	LD BC,0x0302
 	CALL F_move
-	CALL F_raw
+	CALL F_cbreak
+	LD A,0x30
+	CALL F_delay
 	DI
 	LD A,I
 	PUSH AF
@@ -37,8 +39,10 @@
 .main_loop:
 	CALL F_getch
 	AND A
-	JR Z,.main_loop
+	JR Z,.main_blank
 	LD E,A
+	CP 'x'
+	JR Z,.main_end
 	AND 0xe0
 	LD A,E
 	JR NZ,.main_print
@@ -51,6 +55,7 @@
 	LD A,0x57
 	CALL F_attrset
 	JR .main_loop
+.main_end:
 	DI
 	POP AF
 	LD I,A
@@ -58,6 +63,11 @@
 	EI
 	LD BC,0
 	RET
+.main_blank:
+	LD A,0x20
+	CALL F_addch
+	CALL F_refresh
+	JR .main_loop
 
 .section isr
 .skip 0xAC

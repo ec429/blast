@@ -145,11 +145,23 @@ F_nodelay:
 	XOR A
 	RET
 
+.getch_mode:
+	BIT 2,(IX+O_INMODE)
+	RET Z
+	LD A,(IX+O_INTM)
+	AND A
+	JR Z,F_getch
+	SUB (IX+O_INWAIT)
+	RET Z
+	JR .getch_repeat
+
 .global F_getch
 F_getch:
 	LD A,IXH
 	OR IXL
 	RET Z
+	LD (IX+O_INWAIT),0
+.getch_repeat:
 	LD A,(IX+O_INBUFP)
 	LD B,A
 	AND 7
@@ -161,7 +173,7 @@ F_getch:
 	RLCA
 	RLCA
 	XOR E
-	RET Z
+	JR Z,.getch_mode
 	XOR E
 	LD D,A
 	DI
@@ -200,6 +212,7 @@ F_input_isv:
 	OR IXL
 	SCF
 	RET Z
+	INC (IX+O_INWAIT)
 	LD A,(IX+O_INBUFP)
 	LD B,A
 	INC A

@@ -57,7 +57,7 @@ short cbreak(void *buffer __IX)
 	Puts buffer into cbreak (half-cooked) input mode.  This is the default after initscr().
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
-short delay(void *buffer __IX, short timeout __D)
+short delay(void *buffer __IX, short timeout __A)
 	Sets delay mode if timeout==0, else half-delay mode.
 	BE_INVAL: buffer==NULL.
 	BE_BADB: bad (corrupted?) buffer.
