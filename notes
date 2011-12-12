@@ -14,7 +14,7 @@ Layout of buffer:
 005		in_tm: long: half-delay timeout, if in_mode&2; else ignored
 007		in_buf_p: short: bits 2:0 are the write index for input_isv(), bits 6:4 are the read index for getch() and friends, bit 7 is current caps lock state
 008		in_buf: array of 8 char.  The buffer is circular (if input_isv() wants to write, and the buffer's full, it should beep())
-010		in_last_scan: short: the last scancode read
+010		in_last_scan: short: the last scancode read.  Scancode format is CCCSSRRR, where C is column number, R is half-row number, and S is shift state
 011		(unused)
 012		font: void *
 014		font_stand: void *: if NULL, then use generated underlining
