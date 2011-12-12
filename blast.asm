@@ -11,6 +11,7 @@ O_CURY		equ	2
 O_CURX		equ	3
 O_INMODE	equ	4
 O_INTM		equ	5
+O_INWAIT	equ	6
 O_INBUFP	equ	7
 O_INBUF		equ	8
 O_INLASTSCN	equ	0x10
@@ -124,13 +125,13 @@ F_cbreak:
 
 .global F_delay
 F_delay:
+	LD D,A
 	LD A,IXH
 	OR IXL
 	LD A,BE_INVAL
 	RET Z
 	SET 2,(IX+O_INMODE)
-	LD (IX+O_INTM),E
-	LD (IX+O_INTM+1),D
+	LD (IX+O_INTM),D
 	XOR A
 	RET
 
