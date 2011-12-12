@@ -122,6 +122,28 @@ F_cbreak:
 	XOR A
 	RET
 
+.global F_delay
+F_delay:
+	LD A,IXH
+	OR IXL
+	LD A,BE_INVAL
+	RET Z
+	SET 2,(IX+O_INMODE)
+	LD (IX+O_INTM),E
+	LD (IX+O_INTM+1),D
+	XOR A
+	RET
+
+.global F_nodelay
+F_nodelay:
+	LD A,IXH
+	OR IXL
+	LD A,BE_INVAL
+	RET Z
+	RES 2,(IX+O_INMODE)
+	XOR A
+	RET
+
 .global F_getch
 F_getch:
 	LD A,IXH
