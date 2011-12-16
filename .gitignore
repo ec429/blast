@@ -4,3 +4,4 @@ test
 test.tap
 ver.asm
 blast.module
+*.lib

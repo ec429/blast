@@ -7,15 +7,13 @@ ASFLAGS := -z80
 LD := z80-unknown-coff-ld
 LDFLAGS := -T blast.ld
 OBJS := blast.o
-MOBJS := blast_module.o modulecall_dispatcher.o
-MOUT := blast.module
 MLDFLAGS := -T modules.ld
+MOBJS := blast_module.o modulecall_dispatcher.o
 
-all: test.tap $(MOUT)
+all: test.tap blast.module
 
-$(MOUT): $(MOBJS)
-	./constructversion
-	$(LD) -o $(MOUT) $(MOBJS) $(OBJS) $(MLDFLAGS)
+blast.module: $(MOBJS)
+	$(LD) -o blast.module $(MOBJS) $(OBJS) $(MLDFLAGS)
 
 modulecall:
 	make -C modulecall_wrapper
@@ -35,6 +33,13 @@ blast.o test.o: blast.inc
 
 %.o: %.asm
 	$(AS) $(ASFLAGS) $< -o $@
+
+blast_module.o: ver.asm
+
+ver.asm: FORCE
+	./constructversion
+
+FORCE:
 
 clean:
 	-rm -f *.o *.module *.bin
