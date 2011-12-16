@@ -6,10 +6,19 @@ AS := z80-unknown-coff-as
 ASFLAGS := -z80
 LD := z80-unknown-coff-ld
 LDFLAGS := -T blast.ld
-
 OBJS := blast.o
+MOBJS := blast_module.o modulecall_dispatcher.o
+MOUT := blast.module
+MLDFLAGS := -T modules.ld
 
-all: test.tap
+all: test.tap $(MOUT)
+
+$(MOUT): $(MOBJS)
+	./constructversion
+	$(LD) -o $(MOUT) $(MOBJS) $(OBJS) $(MLDFLAGS)
+
+modulecall:
+	make -C modulecall_wrapper
 
 maketap: maketap.c
 	$(CC) $(CFLAGS) -o $@ $<
@@ -27,3 +36,5 @@ blast.o test.o: blast.inc
 %.o: %.asm
 	$(AS) $(ASFLAGS) $< -o $@
 
+clean:
+	-rm -f *.o *.module *.bin

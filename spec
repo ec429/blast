@@ -7,8 +7,9 @@ typedef short int;
 typedef short char;
 Calling conventions:
 	shorts in A,B,C
-	longs in HL,DE,BC
+	longs in DE,BC
 	buffer pointer in IX
+	HL not used
 	if too many to fit, then on stack [first, ..., last, return_address]
 	in general, indicated by __regname in this documentation.
 	typically a (y,x) pair will be passed in (B,C)

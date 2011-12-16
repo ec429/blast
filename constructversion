@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# construct a real version string here
+echo "STR_ident: defb \"Blast `git describe --tags`\",0" > ver.asm

@@ -1,0 +1,45 @@
+0n		Initialisation/option functions:
+00	long b_buflen(short lines __B, short columns __C)
+01	short initscr(void *buffer __IX, short lines __B, short columns __C)
+04	short setfont(void *buffer __IX, void *fontdata __DE, short options __A)
+08	short raw(void *buffer __IX)
+09	short cbreak(void *buffer __IX)
+0C	short delay(void *buffer __IX, short timeout __A)
+0D	short nodelay(void *buffer __IX)
+
+1n		Input functions:
+10	char getch(void *buffer __IX)
+18	void input_isv(void *buffer __IX)
+
+2n/3n	Output functions:
+20	short addch(void *buffer __IX, char ch __A)
+30	short mvaddch(void *buffer __IX, short y __B, short x __C, char ch __A)
+21	short addstr(void *buffer __IX, void *str __DE)
+31	short mvaddstr(void *buffer __IX, short y __B, short x __C, void *str __DE)
+22	short erase(void *buffer __IX)
+32	short clear(void *buffer __IX)
+23	short clrtobot(void *buffer __IX)
+33	short clrtoeol(void *buffer __IX)
+24	void clearok(void *buffer __IX)
+25	void beep(void)
+35	void flash(void)
+26	short scroll(void *buffer __IX, signed short count __A)
+36	short rscroll(void *buffer __IX, signed short count __A)
+3f	short refresh(void *buffer __IX)
+
+4n		Attribute functions:
+40	short attrset(void *buffer __IX, char attrib __A)
+41	char attrget(void *buffer __IX)
+42	short attron(void *buffer __IX, char attrib __A)
+43	short attroff(void *buffer __IX, char attrib __A)
+44	short chgat(void *buffer __IX, short count __A)
+4C	short mvchgat(void *buffer __IX, short count __A, short y __B, short x __C)
+
+5n	Cursor functions:
+50	short getcury(void *buffer __IX)
+51	short getcurx(void *buffer __IX)
+52	short getmaxy(void *buffer __IX)
+53	short getmaxx(void *buffer __IX)
+54	long inch(void *buffer __IX)
+58	short move(void *buffer __IX, short y __B, short x __C)
+5c	long mvinch(void *buffer __IX, short y __B, short x __C)
