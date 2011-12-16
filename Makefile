@@ -10,7 +10,7 @@ OBJS := blast.o
 MLDFLAGS := -T modules.ld
 MOBJS := blast_module.o modulecall_dispatcher.o
 
-all: test.tap blast.module
+all: test.tap blast.module modulecall
 
 blast.module: $(MOBJS)
 	$(LD) -o blast.module $(MOBJS) $(OBJS) $(MLDFLAGS)
