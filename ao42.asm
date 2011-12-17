@@ -20,7 +20,11 @@ get_addr:
 
 .global F_AO42_print
 F_AO42_print:
+	EXX
+	PUSH HL
 	call	.fchr
+	POP HL
+	EXX
 	EX AF,AF'
 	LD B,A
 	EX AF,AF'

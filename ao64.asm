@@ -60,6 +60,9 @@ F_AO64_print:
 	
 ; apply attributes
 	PUSH HL
+	EXX
+	PUSH HL
+	EXX
 	SRL H
 	SRL H
 	SRL H
@@ -70,6 +73,7 @@ F_AO64_print:
 	EXX
 	POP HL
 	LD (HL),D
+	POP HL
 	EXX
 	POP HL
 	ex	de, hl		; put the result back in DE

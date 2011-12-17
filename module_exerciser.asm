@@ -9,9 +9,6 @@
 
 .text
 .global F_main
-	EXX
-	PUSH HL
-	EXX
 	LD B,24
 	LD C,64
 	LD H,blast_module_id
@@ -23,9 +20,6 @@
 	SBC HL,DE
 	JR Z,.bbok
 	POP BC
-	EXX
-	POP HL
-	EXX
 	RET
 .bbok:
 	LD IX,0xB000
@@ -120,9 +114,6 @@
 	LD L,modulecall_blast_refresh
 	CALL MODULECALL
 	POP BC
-	EXX
-	POP HL
-	EXX
 	RET
 
 .data
