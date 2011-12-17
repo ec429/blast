@@ -10,6 +10,7 @@ BE_ATTR		equ	4
 BE_CTRL		equ	5
 
 BFF_ROMFONT		equ	0x00
-BFF_TRUEFONT	equ	0x01
+BFF_AO42		equ	0x01
+BFF_AO64		equ	0x02
 BFO_STANDOUT	equ	0x10
 

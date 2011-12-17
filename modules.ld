@@ -17,6 +17,7 @@ SECTIONS
         __Hisr = .;
        } > blast
 .text : {
+		*(driver)
         *(.text)
         *(text)
          __Htext = .;

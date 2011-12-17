@@ -9,8 +9,11 @@
 .global F_main
 	LD IX,0xB000
 	LD B,24
-	LD C,32
+	LD C,42
 	CALL F_initscr
+	LD DE,TBL_GMfont
+	LD A,0x01
+	CALL F_setfont
 	LD A,'a'
 	CALL F_addch
 	LD A,'b'
@@ -88,3 +91,4 @@
 .isv_table:
 .fill 257,1,0xAC
 STR_hello: .asciz "Hello, world!"
+TBL_GMfont: .incbin "GenevaMono.font"

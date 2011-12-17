@@ -6,7 +6,7 @@ AS := z80-unknown-coff-as
 ASFLAGS := -z80
 LD := z80-unknown-coff-ld
 LDFLAGS := -T blast.ld
-OBJS := blast.o
+OBJS := blast.o ao42.o
 MLDFLAGS := -T modules.ld
 MOBJS := blast_module.o modulecall_dispatcher.o
 
@@ -34,11 +34,13 @@ test.tap: test maketap test_bas.tap
 test: test.o $(OBJS) blast.ld
 	$(LD) -o $@ $(OBJS) $< $(LDFLAGS)
 
+blast.o: ao42.o
+
 blast.o test.o: blast.inc
 
 blast_module.o: blast_module.inc spectranet.inc sysvars.inc
 
-test.o: blast.inc
+test.o: blast.inc GenevaMono.font
 
 module_exerciser.o: blast.inc spectranet.inc blast_module.inc
 

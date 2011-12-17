@@ -45,7 +45,8 @@ short setfont(void *buffer __IX, void *fontdata __DE, short options __A)
 	Sets buffer to use the supplied font.  Implementations (and third-party fonts) should document the values of columns and opts required for each font to render correctly.  initscr() sets the font address to the Spectrum's 32-column ROM font (and standout font to NULL).
 	options consists of flags which may be bitwise ORed together (except that only one BFF_format may be used):
 		0x00	BFF_ROMFONT		Use the ROM font format (this is the default).
-		0x01	BFF_TRUEFONT	Use Andrew Owen's TrueFONT format.
+		0x01	BFF_AO42		Use 42-column font format (Andrew Owen's GenevaMono etc, after Tony Samuels).
+		0x02	BFF_AO64		Use 64-column font format (Andrew Owen).
 		0x10	BFO_STANDOUT	Font is to be used for text with the standout attribute set.  If fontdata is NULL, generated standout is used.
 		(more formats and options may be added later).
 	BE_INVAL: buffer==NULL, or bad arguments.

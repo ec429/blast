@@ -4,23 +4,7 @@
 ;		see <http://www.gnu.org/licenses/gpl.html> or file COPYING
 
 .include	"blast.inc"
-
-O_MAXY		equ	0
-O_MAXX		equ	1
-O_CURY		equ	2
-O_CURX		equ	3
-O_INMODE	equ	4
-O_INTM		equ	5
-O_INWAIT	equ	6
-O_INBUFP	equ	7
-O_INBUF		equ	8
-O_INLASTSCN	equ	0x10
-O_FONT		equ	0x12
-O_FONTSTAND	equ	0x14
-O_FONTFMT	equ	0x16
-O_ATTR		equ	0x17
-O_ADO		equ	0x18
-O_CHARDATA	equ	0x20
+.include	"blast_buffer.inc"
 
 .text
 .global F_b_buflen
@@ -53,7 +37,7 @@ F_initscr:
 	LD (IX+O_INMODE),1
 	LD (IX+O_INBUFP),0
 	LD (IX+O_FONT),0
-	LD (IX+O_FONT+1),0x3C
+	LD (IX+O_FONT+1),0x3D
 	LD (IX+O_FONTSTAND),0
 	LD (IX+O_FONTSTAND+1),0
 	LD (IX+O_FONTFMT),0
@@ -565,13 +549,42 @@ F_refresh:
 	LD A,(DE)
 	EX AF,AF'
 	LD (HL),A
+	LD E,A
 						; paint character: buffer=IX, y=B, x=C, char=A, attr=A'
 						; TODO: test font_fmt and standout
+	LD A,(IX+O_FONTFMT)
+	AND 0xF
+	LD D,A
+	LD A,E
+	CALL Z,.paint_romfont
+	DEC D
+	CALL Z,F_AO42_print
+						; finished painting character
+	POP HL				; &chardata[y][x]
+	POP DE				; &attrdata[y][x]
+	POP BC				; ={y,x}
+.refresh_next:
+	INC HL
+	INC DE
+	INC C
+	LD A,C
+	CP (IX+O_MAXX)
+	JP M,.refresh_loop
+	LD C,0
+	INC B
+	LD A,B
+	CP (IX+O_MAXY)
+	JP M,.refresh_loop
+	XOR A
+	RET
+
+.paint_romfont:
 	LD L,A
 	LD H,0
 	ADD HL,HL
 	ADD HL,HL
 	ADD HL,HL
+	DEC H
 	LD E,(IX+O_FONT)
 	LD D,(IX+O_FONT+1)
 	ADD HL,DE
@@ -609,23 +622,6 @@ F_refresh:
 	LD A,7
 	AND D
 	JR NZ,.paint_romfont_loop
-						; finished painting character
-	POP HL				; &chardata[y][x]
-	POP DE				; &attrdata[y][x]
-	POP BC				; ={y,x}
-.refresh_next:
-	INC HL
-	INC DE
-	INC C
-	LD A,C
-	CP (IX+O_MAXX)
-	JP M,.refresh_loop
-	LD C,0
-	INC B
-	LD A,B
-	CP (IX+O_MAXY)
-	JP M,.refresh_loop
-	XOR A
 	RET
 
 .global F_attrset

@@ -1,6 +1,6 @@
 blast: hacking notes
 
-Get fonts from http://www.worldofspectrum.org/infoseekid.cgi?id=0022511
+Get fonts from http://www.worldofspectrum.org/infoseekid.cgi?id=0022511 (ROM font format, ignore the proportionals)
 64-column font and routine at http://chuntey.wordpress.com/tag/64-columns/ (and linked WoS thread)
 Another 64-col font: http://www.worldofspectrum.org/infoseek.cgi?regexp=^Text-64$&pub=^Outlet$
 
@@ -31,3 +31,8 @@ buffer not full:
 	no key: in_last_scan = 0
 	scan&0xe7 == in_last_scan&0xe7: do nothing
 	scan&0xe7 != in_last_scan&0xe7: add key to the buffer; in_last_scan=scan
+
+42-column font driver
+7------07------07------0
+5----05----05----05----0
+print0print1print2print3

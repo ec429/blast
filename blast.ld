@@ -9,6 +9,7 @@ MEMORY {
 SECTIONS
 {
 .blast : {
+		*(driver)
 		blast.o
 		} > blast
 .text : {
