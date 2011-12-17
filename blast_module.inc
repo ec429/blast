@@ -1,5 +1,5 @@
 ;module number
-blast_module_id						equ 0xFE	; not assigned to us - testing only
+blast_module_id						equ 0x04	; unique module id
 
 ;modulecalls
 modulecall_blast_b_buflen			equ 0x00
