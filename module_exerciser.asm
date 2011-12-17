@@ -10,13 +10,13 @@
 .text
 .global F_main
 	LD B,24
-	LD C,32
+	LD C,64
 	LD H,blast_module_id
 	LD L,modulecall_blast_buflen
 	CALL MODULECALL
 	PUSH HL
-	LD DE,0x0620
-	CCF
+	LD DE,0x0C20
+	AND A
 	SBC HL,DE
 	JR Z,.bbok
 	POP BC
@@ -25,6 +25,13 @@
 	LD IX,0xB000
 	LD H,blast_module_id
 	LD L,modulecall_blast_initscr
+	CALL MODULECALL
+	AND A
+	JR NZ,.reta
+	LD A,0x02
+	LD DE,TBL_AO64font
+	LD H,blast_module_id
+	LD L,modulecall_blast_setfont
 	CALL MODULECALL
 	AND A
 	JR NZ,.reta
