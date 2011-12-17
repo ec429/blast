@@ -36,6 +36,14 @@ test: test.o $(OBJS) blast.ld
 
 blast.o test.o: blast.inc
 
+blast_module.o: blast_module.inc spectranet.inc sysvars.inc
+
+test.o: blast.inc
+
+module_exerciser.o: blast.inc spectranet.inc blast_module.inc
+
+modulecall_dispatcher.o: blast.inc blast_module.inc
+
 %.o: %.asm
 	$(AS) $(ASFLAGS) $< -o $@
 

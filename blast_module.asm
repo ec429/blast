@@ -7,7 +7,7 @@ include "sysvars.inc"
 ; spectranet module vector table
 .section vectors
 		defb 0xAA				; This is a ROM module
-		defb module_id			; our unique ID
+		defb blast_module_id	; our unique ID
 		defw F_init				; reset vector
 		defw 0xFFFF
 		defw 0xFFFF
@@ -18,7 +18,7 @@ include "sysvars.inc"
 		jp J_blast_modulecall	; MODULECALL entry point
 		
 .data
-include "ver.asm"	; generated file containing the defenition of STR_ident, e.g. 'STR_ident: defb "Blast rev. 1",0'
+include "ver.asm"	; generated file containing the defenition of STR_ident, e.g. 'STR_ident: defb "Blast 0.1.2-3-gdeadbee",0'
 
 ; F_init: module initialisation
 F_init:
