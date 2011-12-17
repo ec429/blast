@@ -10,7 +10,7 @@ OBJS := blast.o
 MLDFLAGS := -T modules.ld
 MOBJS := blast_module.o modulecall_dispatcher.o
 
-all: test.tap blast.module modulecall
+all: test.tap blast.module modulecall module_exerciser.tap
 
 blast.module: $(MOBJS)
 	$(LD) -o blast.module $(MOBJS) $(OBJS) $(MLDFLAGS)
@@ -20,6 +20,11 @@ modulecall:
 
 maketap: maketap.c
 	$(CC) $(CFLAGS) -o $@ $<
+
+module_exerciser.tap: module_exerciser.o maketap test_bas.tap
+	./maketap --org=32768 "<module_exerciser.o" ">module_exerciser_bin.tap"
+	cat test_bas.tap module_exerciser_bin.tap > module_exerciser.tap
+	-rm module_exerciser_bin.tap
 
 test.tap: test maketap test_bas.tap
 	./maketap --org=32768 "<test" ">test_bin.tap"
