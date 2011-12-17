@@ -15,6 +15,7 @@ Calling conventions:
 	typically a (y,x) pair will be passed in (B,C)
 	a function may trample /any/ register, so be sure to save the regs you care about on the stack (note: this includes argument registers).
 	exception: void *buffer __IX is never trampled.
+	also note that shadow registers may be used (in particular, if using Sinclair BASIC, beware that HL' gets trampled)
 	The linker symbol for an entry point foo is F_foo.
 Return conventions:
 	short: A
