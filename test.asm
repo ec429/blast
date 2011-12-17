@@ -7,8 +7,6 @@
 
 .text
 .global F_main
-	EXX
-	PUSH HL
 	LD IX,0xB000
 	LD B,24
 	LD C,64
@@ -65,8 +63,6 @@
 	POP AF
 	LD I,A
 	IM 1
-	POP HL
-	EXX
 	EI
 	LD BC,0
 	RET
