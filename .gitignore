@@ -5,3 +5,4 @@ test.tap
 ver.asm
 blast.module
 *.lib
+module_exerciser.tap
