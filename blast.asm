@@ -559,6 +559,8 @@ F_refresh:
 	CALL Z,.paint_romfont
 	DEC D
 	CALL Z,F_AO42_print
+	DEC D
+	CALL Z,F_AO64_print
 						; finished painting character
 	POP HL				; &chardata[y][x]
 	POP DE				; &attrdata[y][x]

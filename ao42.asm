@@ -2,7 +2,7 @@
 ;	Copyright (c) Edward Cree, 2011 <http://jttlov.no-ip.org>
 ;	Licensed under GNU GPL v3+; there is NO WARRANTY
 ;		see <http://www.gnu.org/licenses/gpl.html> or file COPYING
-;	ao42: Driver for BFF_AO42 fonts (based on ANDrew Owen's 42 column.asm)
+;	ao42: Driver for BFF_AO42 fonts (based on Andrew Owen's '42 column.asm')
 ;	entry call F_AO42_print
 ;	buffer=IX, y=B, x=C, char=A, attr=A'
 .include	"blast_buffer.inc"

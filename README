@@ -38,3 +38,5 @@ The fully linked executable is then converted into a .TAP by './maketap'.
 Fonts:
 	ROM font:	32 columns, BFF_ROMFONT, fontdata=0x3D00 in Spectrum ROM.
 	GenevaMono:	42 columns, BFF_AO42, GenevaMono.font.  By Andrew Owen (GPLed)
+	AOwen64:	64 columns, BFF_AO64, built into ao64.asm,
+					fontdata=TBL_AO64font.  By Andrew Owen (GPLed)

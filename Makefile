@@ -6,7 +6,7 @@ AS := z80-unknown-coff-as
 ASFLAGS := -z80
 LD := z80-unknown-coff-ld
 LDFLAGS := -T blast.ld
-OBJS := blast.o ao42.o
+OBJS := blast.o ao42.o ao64.o
 MLDFLAGS := -T modules.ld
 MOBJS := blast_module.o modulecall_dispatcher.o
 

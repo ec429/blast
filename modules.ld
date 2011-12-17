@@ -24,6 +24,7 @@ SECTIONS
         } > blast
 .data : {
          __Ldata = .;
+        *(font)
         *(.data)
         *(data)
          __Hdata = .;

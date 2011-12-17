@@ -7,12 +7,14 @@
 
 .text
 .global F_main
+	EXX
+	PUSH HL
 	LD IX,0xB000
 	LD B,24
-	LD C,42
+	LD C,64
 	CALL F_initscr
-	LD DE,TBL_GMfont
-	LD A,0x01
+	LD DE,TBL_AO64font
+	LD A,0x02
 	CALL F_setfont
 	LD A,'a'
 	CALL F_addch
@@ -63,6 +65,8 @@
 	POP AF
 	LD I,A
 	IM 1
+	POP HL
+	EXX
 	EI
 	LD BC,0
 	RET
@@ -90,5 +94,5 @@
 .balign 0x100
 .isv_table:
 .fill 257,1,0xAC
-STR_hello: .asciz "Hello, world!"
+STR_hello: .asciz "Hello, world! "
 TBL_GMfont: .incbin "GenevaMono.font"

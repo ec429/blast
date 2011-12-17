@@ -10,6 +10,7 @@ SECTIONS
 {
 .blast : {
 		*(driver)
+		*(font)
 		blast.o
 		} > blast
 .text : {
