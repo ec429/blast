@@ -2,7 +2,7 @@
 blast_module_id						equ 0x04	; unique module id
 
 ;modulecalls
-modulecall_blast_b_buflen			equ 0x00
+modulecall_blast_buflen				equ 0x00
 modulecall_blast_initscr			equ 0x01
 modulecall_blast_setfont			equ 0x04
 modulecall_blast_raw				equ 0x08

@@ -21,8 +21,8 @@ modulecall:
 maketap: maketap.c
 	$(CC) $(CFLAGS) -o $@ $<
 
-module_exerciser.tap: module_exerciser.o maketap test_bas.tap
-	./maketap --org=32768 "<module_exerciser.o" ">module_exerciser_bin.tap"
+module_exerciser.tap: module_exerciser maketap test_bas.tap
+	./maketap --org=32768 "<module_exerciser" ">module_exerciser_bin.tap"
 	cat test_bas.tap module_exerciser_bin.tap > module_exerciser.tap
 	-rm module_exerciser_bin.tap
 
@@ -43,6 +43,9 @@ blast_module.o: blast_module.inc spectranet.inc sysvars.inc
 test.o: blast.inc GenevaMono.font
 
 module_exerciser.o: blast.inc spectranet.inc blast_module.inc
+
+module_exerciser: module_exerciser.o blast.ld
+	$(LD) -o $@ $(OBJS) $< $(LDFLAGS)
 
 modulecall_dispatcher.o: blast.inc blast_module.inc
 
