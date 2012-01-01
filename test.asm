@@ -67,14 +67,20 @@
 .section isr
 .skip 0xAC
 .isr:
-	PUSH AF
-	PUSH IX
 	EXX
+	PUSH AF
+	PUSH BC
+	PUSH DE
+	PUSH HL
+	PUSH IX
 	LD IX,0xB000
 	CALL F_input_isv
-	EXX
 	POP IX
+	POP HL
+	POP DE
+	POP BC
 	POP AF
+	EXX
 	EI
 	RETI
 
