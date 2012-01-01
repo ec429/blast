@@ -58,6 +58,7 @@ J_blast_modulecall:
 	defw	F_mvaddstr
 	defw	F_clear
 	defw	0;F_clrtoeol
+	defw	0
 	defw	0;F_flash
 	defw	0;F_rscroll
 	defw	0,0,0,0,0,0,0,0
@@ -69,7 +70,7 @@ J_blast_modulecall:
 	defw	0;F_chgat
 	defw	0,0,0,0,0,0,0
 	defw	0;F_mvchgat
-	defw	0,0,0,0,0,0,0
+	defw	0,0,0
 	defw	F_getcury
 	defw	F_getcurx
 	defw	F_getmaxy
