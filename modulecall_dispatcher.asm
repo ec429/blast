@@ -19,8 +19,8 @@ J_blast_modulecall:
 	ex de,hl
 	add ix,de
 	ex de,hl
-	push ix
-	pop hl
+	ld l,(ix+0)
+	ld h,(ix+1)
 	pop ix
 	jp (hl)
 	
