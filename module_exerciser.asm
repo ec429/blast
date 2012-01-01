@@ -14,7 +14,6 @@
 	LD H,blast_module_id
 	LD L,modulecall_blast_buflen
 	CALL MODULECALL
-	PUSH HL
 	LD DE,0x0C20
 	AND A
 	SBC HL,DE
