@@ -9,7 +9,7 @@
 .global F_main
 	LD IX,0xB000
 	LD B,24
-	LD C,32
+	LD C,64
 	CALL F_initscr
 	LD DE,TBL_AO64font
 	LD A,0x02
