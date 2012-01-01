@@ -43,3 +43,5 @@ modulecall_blast_mvinc				equ 0x5C
 modulecall_no_such_module			equ 0xff
 modulecall_no_such_modulecall		equ 0xfe
 
+;builtin font ids (getfont)
+blast_fontid_ao64					equ 0x02

@@ -11,6 +11,7 @@ Current implementation status:
 	F_b_buflen
 	F_initscr
 	F_setfont
+	F_getfont	# Spectranet module only (not needed for static linking)
 	F_raw
 	F_cbreak
 	F_delay
@@ -22,7 +23,7 @@ Current implementation status:
 	F_addstr	#  "
 	F_mvaddstr	#  "
 	F_clear
-	F_refresh	# Ignores attr.standout
+	F_refresh
 	F_attrset
 	F_attrget
 	F_move
@@ -40,3 +41,4 @@ Fonts:
 	GenevaMono:	42 columns, BFF_AO42, GenevaMono.font.  By Andrew Owen (GPLed)
 	AOwen64:	64 columns, BFF_AO64, built into ao64.asm,
 					fontdata=TBL_AO64font.  By Andrew Owen (GPLed)
+					getfont id=2

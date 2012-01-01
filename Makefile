@@ -8,7 +8,7 @@ LD := z80-unknown-coff-ld
 LDFLAGS := -T blast.ld
 OBJS := blast.o ao42.o ao64.o
 MLDFLAGS := -T modules.ld
-MOBJS := blast_module.o modulecall_dispatcher.o
+MOBJS := blast_module.o modulecall_dispatcher.o getfont.o
 
 all: test.tap blast.module modulecall module_exerciser.tap
 

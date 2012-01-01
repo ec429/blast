@@ -2,6 +2,7 @@
 00	long b_buflen(short lines __B, short columns __C)
 01	short initscr(void *buffer __IX, short lines __B, short columns __C)
 04	short setfont(void *buffer __IX, void *fontdata __DE, short options __A)
+05	void *getfont(short fontid __A)
 08	short raw(void *buffer __IX)
 09	short cbreak(void *buffer __IX)
 0C	short delay(void *buffer __IX, short timeout __A)

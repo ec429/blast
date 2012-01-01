@@ -20,6 +20,7 @@ include "sysvars.inc"
 .data
 include "ver.asm"	; generated file containing the defenition of STR_ident, e.g. 'STR_ident: defb "Blast 0.1.2-3-gdeadbee",0'
 
+.text
 ; F_init: module initialisation
 F_init:
 	;Claim a page of SRAM for our sysvars.
@@ -43,8 +44,10 @@ F_init:
 	ld hl, STR_allocfailed
 	call PRINT42
 	ret
+.data
 STR_allocfailed:	defb	"No memory pages available\n",0
 
+.text
 ; F_fetchpage
 ; Gets our page of RAM and puts it in page area A.
 .globl F_fetchpage

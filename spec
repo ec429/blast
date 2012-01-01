@@ -19,6 +19,7 @@ Calling conventions:
 Return conventions:
 	short: A
 	long: HL
+	void *: DE
 	void: if error, then sets Carry flag.
 Where the return value is used to indicate error conditions, success is indicated with the value 0.
 Notes:
@@ -51,6 +52,10 @@ short setfont(void *buffer __IX, void *fontdata __DE, short options __A)
 		(more formats and options may be added later).
 	BE_INVAL: buffer==NULL, or bad arguments.
 	BE_BADB: bad (corrupted?) buffer.
+void *getfont(short fontid __A)
+	Note: Spectranet module only (not needed for static linking).
+	Provides the setfont addresses of fonts built into the module.
+	Returns NULL if the fontid is not recognised.
 short raw(void *buffer __IX)
 	Puts buffer into raw input mode.
 	BE_INVAL: buffer==NULL.
