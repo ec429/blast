@@ -73,8 +73,25 @@ F_AO42_print:
 	PUSH IX
 	PUSH HL
 	call	get_addr
+	EX AF,AF'
+	LD B,A
+	AND 0x7F
+	EX AF,AF'
+	LD A,0x80
+	AND B
+	JR Z,.nostand
+	LD L,(IX+O_FONTSTAND)
+	LD H,(IX+O_FONTSTAND+1)
+	LD A,H
+	OR L
+	JR NZ,.stand
+	EX AF,AF'
+	OR 0x80
+	EX AF,AF'
+.nostand:
 	LD L,(IX+O_FONT)
 	LD H,(IX+O_FONT+1)
+.stand:
 	ADD HL,DE
 	LD A,(HL)
 	POP IX			; IX=&screen[y][x]
@@ -120,6 +137,53 @@ F_AO42_print:
 	RET
 	
 .print_w:
+	EX AF,AF'
+	LD B,A
+	AND 0x80
+	JR Z,.standok
+	LD A,D
+	CP 7
+	JR NZ,.standok
+	LD A,0x7F
+	AND B
+	EX AF,AF'
+	JR Z,.stand_0
+	DEC A
+	JR Z,.stand_1
+	DEC A
+	JR Z,.stand_2
+.stand_3:
+	LD A,(HL)
+	OR 0x3F
+	LD (HL),A
+	RET
+.stand_2:
+	LD A,(HL)
+	OR 0x0F
+	LD (HL),A
+	INC HL
+	LD A,(HL)
+	OR 0xC0
+	LD (HL),A
+	RET
+.stand_1:
+	LD A,(HL)
+	OR 0x03
+	LD (HL),A
+	INC HL
+	LD A,(HL)
+	OR 0xF0
+	LD (HL),A
+	RET
+.stand_0:
+	LD A,(HL)
+	OR 0xFC
+	LD (HL),A
+	RET
+
+.standok:
+	LD A,B
+	EX AF,AF'
 	JR Z,.print_0
 	DEC A
 	JR Z,.print_1

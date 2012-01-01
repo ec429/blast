@@ -9,10 +9,10 @@
 .global F_main
 	LD IX,0xB000
 	LD B,24
-	LD C,64
+	LD C,42
 	CALL F_initscr
-	LD DE,TBL_AO64font
-	LD A,0x02
+	LD DE,TBL_GMfont
+	LD A,0x01
 	CALL F_setfont
 	LD A,'a'
 	CALL F_addch
@@ -59,9 +59,9 @@
 	LD BC,0
 	RET
 .main_blank:
-	LD A,0x20
-	CALL F_addch
-	CALL F_refresh
+	;LD A,0x20
+	;CALL F_addch
+	;CALL F_refresh
 	JR .main_loop
 
 .section isr
