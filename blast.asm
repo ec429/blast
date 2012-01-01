@@ -547,13 +547,28 @@ F_refresh:
 	PUSH HL				; &chardata[y][x]
 	EX AF,AF'
 	LD A,(DE)
+	LD D,A
 	EX AF,AF'
 	LD (HL),A
 	LD E,A
 						; paint character: buffer=IX, y=B, x=C, char=A, attr=A'
-						; TODO: test font_fmt and standout
+	LD A,0x80
+	AND D
+	JR Z,.refresh_no_standout
+	LD A,(IX+O_FONTSTAND)
+	OR (IX+O_FONTSTAND+1)
+	JR Z,.refresh_no_standout
+	LD A,(IX+O_FONTFMT)
+	AND 0xF0
+	RLCA
+	RLCA
+	RLCA
+	RLCA
+	JR .refresh_standout
+.refresh_no_standout:
 	LD A,(IX+O_FONTFMT)
 	AND 0xF
+.refresh_standout:
 	LD D,A
 	LD A,E
 	CALL Z,.paint_romfont
@@ -581,14 +596,33 @@ F_refresh:
 	RET
 
 .paint_romfont:
+	EXX
+	LD D,0
+	EXX
 	LD L,A
 	LD H,0
 	ADD HL,HL
 	ADD HL,HL
 	ADD HL,HL
 	DEC H
+	EX AF,AF'
+	LD D,A
+	EX AF,AF'
+	LD A,0x80
+	AND D
+	JR Z,.paint_romfont_nostand
+	LD E,(IX+O_FONTSTAND)
+	LD D,(IX+O_FONTSTAND+1)
+	LD A,D
+	OR E
+	JR NZ,.paint_romfont_stand
+	EXX
+	INC D
+	EXX
+.paint_romfont_nostand:
 	LD E,(IX+O_FONT)
 	LD D,(IX+O_FONT+1)
+.paint_romfont_stand:
 	ADD HL,DE
 	PUSH HL				; &font[char]
 	LD A,B
@@ -613,6 +647,7 @@ F_refresh:
 	OR D
 	LD D,A
 	EX AF,AF'
+	AND 0x7F			; clear the high bit (standout, not flash)
 	LD (DE),A
 	EX AF,AF'
 	POP DE				; =&screen[y][x]
@@ -624,6 +659,14 @@ F_refresh:
 	LD A,7
 	AND D
 	JR NZ,.paint_romfont_loop
+	EXX
+	LD A,D
+	AND A				; check for genstandout
+	EXX
+	RET Z
+	DEC D
+	LD A,0xFF
+	LD (DE),A
 	RET
 
 .global F_attrset

@@ -9,7 +9,7 @@
 .global F_main
 	LD IX,0xB000
 	LD B,24
-	LD C,64
+	LD C,32
 	CALL F_initscr
 	LD DE,TBL_AO64font
 	LD A,0x02
@@ -31,13 +31,9 @@
 	CALL F_cbreak
 	LD A,0x30
 	CALL F_delay
-	DI
-	LD A,I
-	PUSH AF
 	LD BC,.isv_table
 	LD A,B
 	LD I,A
-	EI
 	IM 2
 .main_loop:
 	CALL F_getch
@@ -59,11 +55,7 @@
 	CALL F_attrset
 	JR .main_loop
 .main_end:
-	DI
-	POP AF
-	LD I,A
 	IM 1
-	EI
 	LD BC,0
 	RET
 .main_blank:

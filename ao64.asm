@@ -13,6 +13,7 @@ F_AO64_print:
 	EX AF, AF'
 	EXX
 	LD D,A		; save A' in D'
+	LD E,0
 	EXX
 	EX AF, AF'
 	rra			; divide by two with remainder in carry
@@ -27,8 +28,23 @@ F_AO64_print:
 	add	hl, hl		; by
 	add	hl, hl		; eight
 	sbc	hl, de		; subtract DE to get original x7
+	EXX
+	LD A,D			; grab a copy of attr
+	EXX
+	AND 0x80
+	JR Z,.nostand
+	LD E,(IX+O_FONTSTAND)	; offset to
+	LD D,(IX+O_FONTSTAND+1)	; standout font
+	LD A,E
+	OR D
+	JR NZ,.stand
+	EXX
+	INC E
+	EXX
+.nostand:
 	ld	e,(IX+O_FONT)	; offset
 	ld	d,(IX+O_FONT+1)	; to FONT
+.stand:
 	add	hl, de		; compensate for
 	ld de,0x71		; font base being 32
 	sbc hl, de		; HL holds address of first byte of character map in FONT
@@ -72,7 +88,9 @@ F_AO64_print:
 	PUSH HL
 	EXX
 	POP HL
-	LD (HL),D
+	LD A,0x7F
+	AND D
+	LD (HL),A
 	POP HL
 	EXX
 	POP HL
@@ -117,7 +135,7 @@ l_on_l:
 	inc	d		; point to next screen location
 	inc	hl		; point to next font data
 	djnz	ll_lp		; loop 8 times
-	ret
+	JR .done_l
 
 ; right nibble on right hand side
 
@@ -134,7 +152,7 @@ r_on_r:
 	inc	d		; point to next screen location
 	inc	hl		; point to next font data
 	djnz	rr_lp		; loop 8 times
-	ret
+	JR .done_r
 
 ; left nibble on right hand side
 
@@ -155,7 +173,17 @@ l_on_r:
 	inc	d		; point to next screen location
 	inc	hl		; point to next font data
 	djnz	lr_lp		; loop 8 times
-	ret
+.done_r:
+	EXX
+	LD A,E
+	AND A
+	EXX
+	RET Z
+	DEC D
+	LD A,(DE)
+	OR 0xF0
+	LD (DE),A
+	RET
 
 ; right nibble on left hand side
 
@@ -176,7 +204,17 @@ r_on_l:
 	inc	d		; point to next screen location
 	inc	hl		; point to next font data
 	djnz	rl_lp		; loop 8 times
-	ret
+.done_l:
+	EXX
+	LD A,E
+	AND A
+	EXX
+	RET Z
+	DEC D
+	LD A,(DE)
+	OR 0x0F
+	LD (DE),A
+	RET
 
 ; HALF WIDTH 4x8 FONT
 ; Top row is always zero and not stored (336 bytes)
