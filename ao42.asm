@@ -20,7 +20,9 @@ get_addr:
 
 .global F_AO42_print
 F_AO42_print:
+	PUSH BC
 	EXX
+	POP BC
 	PUSH HL
 	call	.fchr
 	POP HL
@@ -141,7 +143,9 @@ F_AO42_print:
 	LD B,A
 	AND 0x80
 	JR Z,.standok
+	EXX
 	LD A,D
+	EXX
 	CP 7
 	JR NZ,.standok
 	LD A,0x7F

@@ -20,11 +20,15 @@
 	CALL F_addch
 	LD A,'c'
 	CALL F_addch
-	LD A,0x57
+	LD A,0x57|0x80
 	CALL F_attrset
 	LD BC,0x0100
 	LD DE,STR_hello
 	CALL F_mvaddstr
+	LD A,0x57
+	CALL F_attrset
+	LD A,' '
+	CALL F_addch
 	CALL F_refresh
 	LD BC,0x0302
 	CALL F_move
@@ -86,5 +90,5 @@
 .balign 0x100
 .isv_table:
 .fill 257,1,0xAC
-STR_hello: .asciz "Hello, world! "
+STR_hello: .asciz "Hello, world!"
 TBL_GMfont: .incbin "GenevaMono.font"
