@@ -33,7 +33,7 @@
 	LD BC,0x0302
 	CALL F_move
 	CALL F_cbreak
-	LD A,0x30
+	LD A,0
 	CALL F_delay
 	LD BC,.isv_table
 	LD A,B
@@ -63,9 +63,9 @@
 	LD BC,0
 	RET
 .main_blank:
-	;LD A,0x20
-	;CALL F_addch
-	;CALL F_refresh
+	LD A,0x20
+	CALL F_addch
+	CALL F_refresh
 	JR .main_loop
 
 .section isr

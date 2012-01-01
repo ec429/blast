@@ -34,8 +34,6 @@ test.tap: test maketap test_bas.tap
 test: test.o $(OBJS) blast.ld
 	$(LD) -o $@ $(OBJS) $< $(LDFLAGS)
 
-blast.o: ao42.o
-
 blast.o test.o: blast.inc
 
 blast_module.o: blast_module.inc spectranet.inc sysvars.inc
