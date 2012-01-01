@@ -34,6 +34,9 @@ extern unsigned char __LIB__ blast_nodelay(void *buffer);
 extern unsigned char __LIB__ blast_getch(void *buffer);
 extern void __LIB__ blast_input_isv(void *buffer);
 
+extern unsigned char __LIB__ blast_addch(void *buffer, char ch);
+extern unsigned char __LIB__ blast_mvaddch(void *buffer, unsigned char y, unsigned char x, char ch);
+
 extern unsigned char __LIB__ blast_refresh(void *buffer);
 
 #endif

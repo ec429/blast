@@ -6,7 +6,11 @@ blast_raw
 blast_cbreak
 blast_delay
 blast_nodelay
+
 blast_getch
 blast_input_isv
+
+blast_addch
+blast_mvaddch
 
 blast_refresh
