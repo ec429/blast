@@ -14,6 +14,11 @@ J_blast_modulecall:
 	;modulecall number in L register
 	push ix
 	ld ix,.jumptbl
+	EX AF,AF'
+	LD A,L
+	CP (.jumpend-.jumptbl)/2
+	JP P,.unknowncall
+	EX AF,AF'
 	ld h,0
 	add hl,hl
 	ex de,hl
@@ -22,6 +27,11 @@ J_blast_modulecall:
 	ld l,(ix+0)
 	ld h,(ix+1)
 	pop ix
+	EX AF,AF'
+	LD A,H
+	OR L
+	JP Z,.unknowncall
+	EX AF,AF'
 	jp (hl)
 	
 	;jump table
@@ -81,7 +91,7 @@ J_blast_modulecall:
 	defw	0,0,0
 	defw	0;F_mvinch
 	defw	0,0,0
-.fill 160,2,0
+.jumpend:
 
 .unknowncall:
 	;the call byte is not matched by anything
