@@ -25,7 +25,7 @@
 extern unsigned int	__LIB__ blast_buflen(unsigned char lines, unsigned char columns);
 extern unsigned char __LIB__ blast_initscr(void *buffer, unsigned char lines, unsigned char columns);
 extern unsigned char __LIB__ blast_setfont(void *buffer, void *fontdata, unsigned char options);
-extern void * __LIB__ blast_getfont(unsigned char fontid);
+extern void __LIB__ *blast_getfont(unsigned char fontid);
 extern unsigned char __LIB__ blast_raw(void *buffer);
 extern unsigned char __LIB__ blast_cbreak(void *buffer);
 extern unsigned char __LIB__ blast_delay(void *buffer, unsigned char timeout);
