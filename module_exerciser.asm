@@ -4,7 +4,6 @@
 ; module_exerciser.asm: library exerciser for the Spectranet module
 
 .include	"spectranet.inc"
-.include	"blast.inc"
 .include	"blast_module.inc"
 
 .text
@@ -27,8 +26,17 @@
 	CALL MODULECALL
 	AND A
 	JP NZ,.reta
+	LD A,blast_fontid_ao64
+	LD H,blast_module_id
+	LD L,modulecall_blast_getfont
+	CALL MODULECALL
+	LD A,H
+	OR L
+	JR NZ,.gfok
+	LD BC,0xff
+	RET
+.gfok:
 	LD A,0x02
-	LD DE,TBL_AO64font
 	LD H,blast_module_id
 	LD L,modulecall_blast_setfont
 	CALL MODULECALL

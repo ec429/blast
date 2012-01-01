@@ -5,15 +5,14 @@ CFLAGS := -Wall -Wextra -Werror -pedantic --std=gnu99
 AS := z80-unknown-coff-as
 ASFLAGS := -z80
 LD := z80-unknown-coff-ld
-LDFLAGS := -T blast.ld
+LDFLAGS := 
 OBJS := blast.o ao42.o ao64.o
-MLDFLAGS := -T modules.ld
 MOBJS := blast_module.o modulecall_dispatcher.o getfont.o
 
 all: test.tap blast.module modulecall module_exerciser.tap
 
 blast.module: $(MOBJS)
-	$(LD) -o blast.module $(MOBJS) $(OBJS) $(MLDFLAGS)
+	$(LD) -o blast.module $(MOBJS) $(OBJS) $(LDFLAGS) -T modules.ld
 
 modulecall:
 	make -C modulecall_wrapper
@@ -32,7 +31,7 @@ test.tap: test maketap test_bas.tap
 	-rm test_bin.tap
 
 test: test.o $(OBJS) blast.ld
-	$(LD) -o $@ $(OBJS) $< $(LDFLAGS)
+	$(LD) -o $@ $(OBJS) $< $(LDFLAGS) -T blast.ld
 
 blast.o test.o: blast.inc
 
@@ -42,8 +41,8 @@ test.o: blast.inc GenevaMono.font
 
 module_exerciser.o: blast.inc spectranet.inc blast_module.inc
 
-module_exerciser: module_exerciser.o blast.ld
-	$(LD) -o $@ $(OBJS) $< $(LDFLAGS)
+module_exerciser: module_exerciser.o blast_module.ld
+	$(LD) -o $@ $< $(LDFLAGS) -T blast_module.ld
 
 modulecall_dispatcher.o: blast.inc blast_module.inc
 
