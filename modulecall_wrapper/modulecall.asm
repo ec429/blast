@@ -8,7 +8,7 @@ DEFC modulecall_blast_cbreak			= 0x09
 DEFC modulecall_blast_delay				= 0x0C
 DEFC modulecall_blast_nodelay			= 0x0D
 DEFC modulecall_blast_getch				= 0x10
-DEFC modulecall_blast_input				= 0x18
+DEFC modulecall_blast_input_isv			= 0x18
 DEFC modulecall_blast_addch				= 0x20
 DEFC modulecall_blast_mvaddch			= 0x30
 DEFC modulecall_blast_addstr			= 0x21
@@ -39,4 +39,4 @@ DEFC modulecall_blast_mvinc				= 0x5C
 
 DEFC MODULECALL = 0x3FF8
 
-DEFC MODULE_ID = 0xFE	;same as in ../blast_module.inc
+DEFC MODULE_ID = 0x04	;same as in ../blast_module.inc
