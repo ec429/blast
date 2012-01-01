@@ -1,6 +1,5 @@
 ;modulecall functions
 DEFC modulecall_blast_buflen			= 0x00		;modulecall 0x0400
-DEFC modulecall_blast_b_buflen			= 0x00
 DEFC modulecall_blast_initscr			= 0x01
 DEFC modulecall_blast_setfont			= 0x04
 DEFC modulecall_blast_getfont			= 0x05

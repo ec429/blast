@@ -14,7 +14,7 @@ include "modulecall.asm"
 	ld sp,hl	;restore sp
 	
 	ld h,MODULE_ID
-	ld l,modulecall_blast_buflen
+	ld l,modulecall_blast_initscr
 	call MODULECALL
 
 	ld h,0
