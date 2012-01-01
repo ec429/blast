@@ -96,6 +96,10 @@
 	LD H,blast_module_id
 	LD L,modulecall_blast_mvaddch
 	CALL MODULECALL
+	LD A,' '
+	LD H,blast_module_id
+	LD L,modulecall_blast_addch
+	CALL MODULECALL
 	LD A,0xB8
 	LD H,blast_module_id
 	LD L,modulecall_blast_attrset
