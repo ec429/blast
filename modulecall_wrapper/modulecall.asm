@@ -1,8 +1,9 @@
 ;modulecall functions
-DEFC modulecall_blast_buflen			= 0x00		;modulecall 0xFE00
+DEFC modulecall_blast_buflen			= 0x00		;modulecall 0x0400
 DEFC modulecall_blast_b_buflen			= 0x00
 DEFC modulecall_blast_initscr			= 0x01
 DEFC modulecall_blast_setfont			= 0x04
+DEFC modulecall_blast_getfont			= 0x05
 DEFC modulecall_blast_raw				= 0x08
 DEFC modulecall_blast_cbreak			= 0x09
 DEFC modulecall_blast_delay				= 0x0C
@@ -40,3 +41,4 @@ DEFC modulecall_blast_mvinc				= 0x5C
 DEFC MODULECALL = 0x3FF8
 
 DEFC MODULE_ID = 0x04	;same as in ../blast_module.inc
+

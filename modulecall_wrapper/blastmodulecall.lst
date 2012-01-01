@@ -1,6 +1,7 @@
 blast_buflen
 blast_initscr
 blast_setfont
+blast_getfont
 blast_raw
 blast_cbreak
 blast_delay

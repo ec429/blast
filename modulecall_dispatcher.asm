@@ -31,7 +31,7 @@ J_blast_modulecall:
 	defw	0
 	defw	0
 	defw	F_setfont
-	defw	0
+	defw	F_getfont
 	defw	0
 	defw	0
 	defw	F_raw

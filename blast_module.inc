@@ -5,6 +5,7 @@ blast_module_id						equ 0x04	; unique module id
 modulecall_blast_buflen				equ 0x00
 modulecall_blast_initscr			equ 0x01
 modulecall_blast_setfont			equ 0x04
+modulecall_blast_getfont			equ 0x05
 modulecall_blast_raw				equ 0x08
 modulecall_blast_cbreak				equ 0x09
 modulecall_blast_delay				equ 0x0C
@@ -45,3 +46,4 @@ modulecall_no_such_modulecall		equ 0xfe
 
 ;builtin font ids (getfont)
 blast_fontid_ao64					equ 0x02
+
