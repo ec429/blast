@@ -8,9 +8,18 @@
 #define	BE_INVAL				0x02
 #define	BE_RANGE				0x03
 #define	BE_ATTR					0x04
-#define BE_CTRL					0x05
-#define BE_NO_MODULECALL		0xfe	//254
-#define BE_NO_MODULE			0xff	//255
+#define	BE_CTRL					0x05
+#define	BE_NO_MODULECALL		0xfe	//254
+#define	BE_NO_MODULE			0xff	//255
+
+/* font flags */
+#define	BFF_ROMFONT				0x00
+#define	BFF_AO42				0x01
+#define	BFF_AO64				0x02
+#define	BFO_STANDOUT			0x10
+
+/* getfont() fontids */
+#define	BFONT_AO64				0x02
 
 /* entry points */
 extern unsigned int	__LIB__ blast_buflen(unsigned char lines, unsigned char columns);
@@ -25,10 +34,6 @@ extern unsigned char __LIB__ blast_nodelay(void *buffer);
 extern unsigned char __LIB__ blast_getch(void *buffer);
 extern void __LIB__ blast_input_isv(void *buffer);
 
-
 extern unsigned char __LIB__ blast_refresh(void *buffer);
-
-/* getfont() fontids */
-#define blast_fontid_ao64		0x02
 
 #endif
