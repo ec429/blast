@@ -67,7 +67,6 @@
 .section isr
 .skip 0xAC
 .isr:
-	EXX
 	PUSH AF
 	PUSH BC
 	PUSH DE
@@ -80,7 +79,6 @@
 	POP DE
 	POP BC
 	POP AF
-	EXX
 	EI
 	RETI
 

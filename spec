@@ -74,6 +74,7 @@ char getch(void *buffer __IX)
 	For details of return values see "Keymapping", below.
 void input_isv(void *buffer __IX)
 	Interrupt Service routine to read the keyboard; a call to this function should be placed in your own interrupt service routine.
+	Note that input_isv() doesn't save the registers, as it assumes your ISR will have already done this.
 
 Output functions:
 short addch(void *buffer __IX, char ch __A)
