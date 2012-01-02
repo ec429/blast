@@ -580,8 +580,9 @@ F_scroll:
 	LD C,A
 	CALL .multiply8
 	POP BC				; ={count,}
-	POP DE				; =&attrdata[y][x] XXX
+	POP DE				; =&attrdata[y][x]
 	ADD HL,DE
+	PUSH BC
 	PUSH DE
 	PUSH HL
 	LD A,(IX+O_MAXY)
@@ -594,6 +595,21 @@ F_scroll:
 	POP HL
 	POP DE
 	LDIR
+	POP BC
+	LD C,(IX+O_MAXX)
+	PUSH DE
+	CALL .multiply8
+	POP DE
+	PUSH HL
+	POP BC
+	PUSH DE
+	POP HL
+	LD A,(IX+O_ATTR)
+	LD (HL),A
+	INC DE
+	DEC BC
+	LDIR
+	LD A,0
 	RET
 .scroll_down:
 	LD A,0xFF
