@@ -414,12 +414,8 @@ F_addch:
 	PUSH IX
 	POP BC
 	ADD HL,BC
-	PUSH HL				; buffer+(cury*maxx)+curx
-	LD L,(IX+O_ADO)
-	LD H,(IX+O_ADO+1)
-	PUSH HL
-	POP BC
-	POP HL				; =buffer+(cury*maxx)+curx
+	LD C,(IX+O_ADO)
+	LD B,(IX+O_ADO+1)
 	PUSH HL				; buffer+(cury*maxx)+curx
 	ADD HL,BC
 	LD A,(IX+O_ATTR)
@@ -494,8 +490,8 @@ F_clear:
 	PUSH HL				; ado
 	LD DE,O_CHARDATA
 	SBC HL,DE
-	PUSH HL
-	POP BC
+	LD B,H
+	LD C,L
 	DEC BC
 	PUSH BC				; ldircount
 	PUSH IX
@@ -550,8 +546,8 @@ F_scroll:
 	PUSH IX
 	POP HL
 	ADD HL,BC
-	PUSH HL
-	POP BC
+	LD B,H
+	LD C,L
 	POP DE
 	POP HL
 .scroll_charloop:
@@ -590,8 +586,8 @@ F_scroll:
 	LD B,A
 	LD C,(IX+O_MAXX)
 	CALL .multiply8
-	PUSH HL
-	POP BC
+	LD B,H
+	LD C,L
 	POP HL
 	POP DE
 	LDIR
@@ -600,10 +596,10 @@ F_scroll:
 	PUSH DE
 	CALL .multiply8
 	POP DE
-	PUSH HL
-	POP BC
-	PUSH DE
-	POP HL
+	LD B,H
+	LD C,L
+	LD H,D
+	LD L,E
 	LD A,(IX+O_ATTR)
 	LD (HL),A
 	INC DE
