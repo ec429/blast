@@ -532,7 +532,6 @@ F_scroll:
 	CP 0
 	RET Z
 	JP M,.scroll_down
-	LD BC,0				; B=y, C=x
 	PUSH IX
 	POP HL
 	LD DE,O_CHARDATA
@@ -544,39 +543,44 @@ F_scroll:
 	CALL .multiply8
 	POP DE
 	ADD HL,DE
+	PUSH HL
+	PUSH DE
+	LD C,(IX+O_ADO)
+	LD B,(IX+O_ADO+1)
+	PUSH IX
+	POP HL
+	ADD HL,BC
+	PUSH HL
+	POP BC
+	POP DE
+	POP HL
 .scroll_charloop:
 	LD A,(HL)
 	OR 0x80
 	LD (DE),A
 	INC DE
 	INC HL
-	PUSH DE
 	PUSH HL
-	LD C,(IX+O_ADO)
-	LD B,(IX+O_ADO+1)
-	PUSH IX
-	POP HL
-	ADD HL,BC
-	POP DE
 	AND A
-	SBC HL,DE
-	PUSH DE
+	SBC HL,BC
 	POP HL
-	POP DE
 	JR NZ,.scroll_charloop
-	EX AF,AF'
-	LD C,(IX+O_ADO)
-	LD B,(IX+O_ADO+1)
-	PUSH IX
+	LD A,0xA0
+	PUSH BC
+.scroll_charclear:
+	LD (DE),A
+	INC DE
+	PUSH HL
+	SBC HL,DE
 	POP HL
-	ADD HL,BC
-	PUSH HL				; &attrdata[y][x]
+	JR NZ,.scroll_charclear
+	EX AF,AF'
 	PUSH AF				; {count,}
 	LD B,(IX+O_MAXX)
 	LD C,A
 	CALL .multiply8
 	POP BC				; ={count,}
-	POP DE				; =&attrdata[y][x]
+	POP DE				; =&attrdata[y][x] XXX
 	ADD HL,DE
 	PUSH DE
 	PUSH HL
