@@ -20,7 +20,7 @@ Layout of buffer:
 012		font: void *
 014		font_stand: void *: if NULL, then use generated underlining
 016		font_fmt: short: low 4 bits are format of font, high 4 are format of standout font
-017		attr: current attributes
+017		attr: short: current attributes
 018		ado: long: attrdata offset
 020		chardata: array of maxy lines, each of which is an array of maxx 7-bit characters; the high bit is used to indicate "needs repaint"
 ado<<3	attrdata: array laid out similarly to chardata.  The repaint bit is common to both data and attribute parts (ie. if one is changed, both are repainted).  Attributes are stored in attrset() form (SBPPPIII)
