@@ -521,6 +521,80 @@ F_clear:
 	XOR A
 	RET
 
+.global F_scroll
+F_scroll:
+	LD D,A
+	LD A,IXH
+	OR IXL
+	LD A,BE_INVAL
+	RET Z
+	LD A,D
+	CP 0
+	RET Z
+	JP M,.scroll_down
+	LD BC,0				; B=y, C=x
+	PUSH IX
+	POP HL
+	LD DE,O_CHARDATA
+	ADD HL,DE
+	PUSH HL
+	LD B,(IX+O_MAXX)
+	LD C,A
+	EX AF,AF'
+	CALL .multiply8
+	POP DE
+	ADD HL,DE
+.scroll_charloop:
+	LD A,(HL)
+	OR 0x80
+	LD (DE),A
+	INC DE
+	INC HL
+	PUSH DE
+	PUSH HL
+	LD C,(IX+O_ADO)
+	LD B,(IX+O_ADO+1)
+	PUSH IX
+	POP HL
+	ADD HL,BC
+	POP DE
+	AND A
+	SBC HL,DE
+	PUSH DE
+	POP HL
+	POP DE
+	JR NZ,.scroll_charloop
+	EX AF,AF'
+	LD C,(IX+O_ADO)
+	LD B,(IX+O_ADO+1)
+	PUSH IX
+	POP HL
+	ADD HL,BC
+	PUSH HL				; &attrdata[y][x]
+	PUSH AF				; {count,}
+	LD B,(IX+O_MAXX)
+	LD C,A
+	CALL .multiply8
+	POP BC				; ={count,}
+	POP DE				; =&attrdata[y][x]
+	ADD HL,DE
+	PUSH DE
+	PUSH HL
+	LD A,(IX+O_MAXY)
+	SUB B
+	LD B,A
+	LD C,(IX+O_MAXX)
+	CALL .multiply8
+	PUSH HL
+	POP BC
+	POP HL
+	POP DE
+	LDIR
+	RET
+.scroll_down:
+	LD A,0xFF
+	RET
+
 .global F_refresh
 F_refresh:
 	LD A,IXH

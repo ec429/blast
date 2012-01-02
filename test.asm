@@ -35,6 +35,8 @@
 	CALL F_cbreak
 	LD A,0
 	CALL F_delay
+	LD A,1
+	CALL F_scroll
 	LD BC,.isv_table
 	LD A,B
 	LD I,A
