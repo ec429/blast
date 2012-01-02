@@ -11,6 +11,11 @@ MOBJS := blast_module.o modulecall_dispatcher.o getfont.o
 
 all: test.tap blast.module modulecall module_exerciser.tap
 
+pkg: blast.pkg
+
+%.pkg: %.module
+	make-installer $<
+
 blast.module: $(MOBJS)
 	$(LD) -o blast.module $(MOBJS) $(OBJS) $(LDFLAGS) -T modules.ld
 

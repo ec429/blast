@@ -1,4 +1,5 @@
 #!/bin/sh
 
-# construct a real version string here
-echo "STR_ident: defb \"Blast `git describe --tags`\",0" > ver.asm
+# constructs the version string
+echo "STR_ident: defb \"Blast `git describe --tags`\",0" > ver2.asm
+if (! cmp -s ver.asm ver2.asm); then mv ver2.asm ver.asm; else rm ver2.asm; fi

@@ -7,3 +7,4 @@ blast.module
 *.lib
 module_exerciser
 module_exerciser.tap
+*.pkg
