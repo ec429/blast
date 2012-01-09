@@ -18,8 +18,8 @@ modulecall_blast_addstr				equ 0x21
 modulecall_blast_mvaddstr			equ 0x31
 modulecall_blast_erase				equ 0x22
 modulecall_blast_clear				equ 0x32
-modulecall_blast_cleartobot			equ 0x23
-modulecall_blast_cleartoeol			equ 0x33
+modulecall_blast_clrtobot			equ 0x23
+modulecall_blast_clrtoeol			equ 0x33
 modulecall_blast_clearok			equ 0x24
 modulecall_blast_beep				equ 0x25
 modulecall_blast_flash				equ 0x35
@@ -38,7 +38,7 @@ modulecall_blast_getmaxy			equ 0x52
 modulecall_blast_getmaxx			equ 0x53
 modulecall_blast_inch				equ 0x54
 modulecall_blast_move				equ 0x58
-modulecall_blast_mvinc				equ 0x5C
+modulecall_blast_mvinch				equ 0x5C
 
 ;modulecall return values
 modulecall_no_such_module			equ 0xff

@@ -12,5 +12,16 @@ blast_input_isv
 
 blast_addch
 blast_mvaddch
-
+blast_addstr
+blast_mvaddstr
+blast_erase
+blast_clear
+blast_clrtobot
+blast_clrtoeol
+blast_clearok
+blast_beep
+blast_flash
+blast_scroll
+blast_rscroll
 blast_refresh
+

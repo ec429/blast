@@ -36,7 +36,17 @@ extern void __LIB__ blast_input_isv(void *buffer);
 
 extern unsigned char __LIB__ blast_addch(void *buffer, char ch);
 extern unsigned char __LIB__ blast_mvaddch(void *buffer, unsigned char y, unsigned char x, char ch);
-
+extern unsigned char __LIB__ blast_addstr(void *buffer, void *str);
+extern unsigned char __LIB__ blast_mvaddstr(void *buffer, unsigned char y, unsigned char x, void *str);
+extern unsigned char __LIB__ blast_erase(void *buffer);
+extern unsigned char __LIB__ blast_clear(void *buffer);
+extern unsigned char __LIB__ blast_clrtobot(void *buffer);
+extern unsigned char __LIB__ blast_clrtoeol(void *buffer);
+extern void __LIB__ blast_clearok(void *buffer);
+extern void __LIB__ blast_beep(void);
+extern void __LIB__ blast_flash(void);
+extern unsigned char __LIB__ blast_scroll(void *buffer, signed char count);
+extern unsigned char __LIB__ blast_rscroll(void *buffer, signed char count);
 extern unsigned char __LIB__ blast_refresh(void *buffer);
 
 #endif
