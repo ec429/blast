@@ -15,8 +15,8 @@ DEFC modulecall_blast_addstr			= 0x21
 DEFC modulecall_blast_mvaddstr			= 0x31
 DEFC modulecall_blast_erase				= 0x22
 DEFC modulecall_blast_clear				= 0x32
-DEFC modulecall_blast_cleartobot		= 0x23
-DEFC modulecall_blast_cleartoeol		= 0x33
+DEFC modulecall_blast_clrtobot			= 0x23
+DEFC modulecall_blast_clrtoeol			= 0x33
 DEFC modulecall_blast_clearok			= 0x24
 DEFC modulecall_blast_beep				= 0x25
 DEFC modulecall_blast_flash				= 0x35
@@ -35,7 +35,7 @@ DEFC modulecall_blast_getmaxy			= 0x52
 DEFC modulecall_blast_getmaxx			= 0x53
 DEFC modulecall_blast_inch				= 0x54
 DEFC modulecall_blast_move				= 0x58
-DEFC modulecall_blast_mvinc				= 0x5C
+DEFC modulecall_blast_mvinch			= 0x5C
 
 DEFC MODULECALL = 0x3FF8
 
