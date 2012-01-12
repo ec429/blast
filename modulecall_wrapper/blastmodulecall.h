@@ -21,6 +21,10 @@
 /* getfont() fontids */
 #define	BFONT_AO64				0x02
 
+/* Attributes */
+#include <spectrum.h>	/* defines the colours */
+#define STANDOUT		FLASH
+
 /* entry points */
 extern unsigned int	__LIB__ blast_buflen(unsigned char lines, unsigned char columns);
 extern unsigned char __LIB__ blast_initscr(void *buffer, unsigned char lines, unsigned char columns);
@@ -49,4 +53,18 @@ extern unsigned char __LIB__ blast_scroll(void *buffer, signed char count);
 extern unsigned char __LIB__ blast_rscroll(void *buffer, signed char count);
 extern unsigned char __LIB__ blast_refresh(void *buffer);
 
+extern unsigned char __LIB__ blast_attrset(void *buffer, char attrib);
+extern unsigned char __LIB__ blast_attron(void *buffer, char attrib);
+extern unsigned char __LIB__ blast_attroff(void *buffer, char attrib);
+extern char __LIB__ blast_attrget(void *buffer);
+extern unsigned char __LIB__ blast_chgat(void *buffer, unsigned char count);
+extern unsigned char __LIB__ blast_mvchgat(void *buffer, unsigned char count, unsigned char y, unsigned char x);
+
+extern unsigned char __LIB__ blast_move(void *buffer, unsigned char y, unsigned char x);
+extern unsigned char __LIB__ blast_getcury(void *buffer);
+extern unsigned char __LIB__ blast_getcurx(void *buffer);
+extern unsigned char __LIB__ blast_getmaxy(void *buffer);
+extern unsigned char __LIB__ blast_getmaxx(void *buffer);
+extern unsigned int __LIB__ blast_inch(void *buffer);
+extern unsigned int __LIB__ blast_mvinch(void *buffer, unsigned char y, unsigned char x);
 #endif

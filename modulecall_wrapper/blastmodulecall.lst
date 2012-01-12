@@ -25,3 +25,17 @@ blast_scroll
 blast_rscroll
 blast_refresh
 
+blast_attrset
+blast_attron
+blast_attroff
+blast_attrget
+blast_chgat
+blast_mvchgat
+
+blast_move
+blast_getcury
+blast_getcurx
+blast_getmaxy
+blast_getmaxx
+blast_inch
+blast_mvinch
