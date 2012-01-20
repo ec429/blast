@@ -3,9 +3,6 @@ include "blast.inc"
 
 .globl J_blast_modulecall
 J_blast_modulecall:
-	call F_fetchpage	;get our ram page
-	ret c				;failed to get our page
-	
 	exx
 	ld de,.finished
 	push de
@@ -96,12 +93,10 @@ J_blast_modulecall:
 .unknowncall:
 	;the call byte is not matched by anything
 	pop hl	;we didn't "return" to .finished
-	call F_restorepage
 	ld a, modulecall_no_such_modulecall	;error no such function
 	scf					;signal an error
 	ret
 
 .finished:
-	call F_restorepage
 	and a
 	ret
