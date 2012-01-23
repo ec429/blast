@@ -20,5 +20,6 @@ O_FONTSTAND	equ	0x14
 O_FONTFMT	equ	0x16
 O_ATTR		equ	0x17
 O_ADO		equ	0x18
+O_YOFF		equ	0x1A
+O_XOFF		equ	0x1B
 O_CHARDATA	equ	0x20
-

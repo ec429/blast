@@ -30,6 +30,7 @@ extern unsigned int	__LIB__ blast_buflen(unsigned char lines, unsigned char colu
 extern unsigned char __LIB__ blast_initscr(void *buffer, unsigned char lines, unsigned char columns);
 extern unsigned char __LIB__ blast_setfont(void *buffer, void *fontdata, unsigned char options);
 extern void __LIB__ *blast_getfont(unsigned char fontid);
+extern unsigned char __LIB__ blast_offset(void *buffer, unsigned char y_off, unsigned char x_off);
 extern unsigned char __LIB__ blast_raw(void *buffer);
 extern unsigned char __LIB__ blast_cbreak(void *buffer);
 extern unsigned char __LIB__ blast_delay(void *buffer, unsigned char timeout);
@@ -65,6 +66,8 @@ extern unsigned char __LIB__ blast_getcury(void *buffer);
 extern unsigned char __LIB__ blast_getcurx(void *buffer);
 extern unsigned char __LIB__ blast_getmaxy(void *buffer);
 extern unsigned char __LIB__ blast_getmaxx(void *buffer);
+extern unsigned char __LIB__ blast_getyoff(void *buffer);
+extern unsigned char __LIB__ blast_getxoff(void *buffer);
 extern unsigned int __LIB__ blast_inch(void *buffer);
 extern unsigned int __LIB__ blast_mvinch(void *buffer, unsigned char y, unsigned char x);
 #endif

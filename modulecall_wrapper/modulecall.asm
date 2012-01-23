@@ -3,6 +3,7 @@ DEFC modulecall_blast_buflen			= 0x00		;modulecall 0x0400
 DEFC modulecall_blast_initscr			= 0x01
 DEFC modulecall_blast_setfont			= 0x04
 DEFC modulecall_blast_getfont			= 0x05
+DEFC modulecall_blast_offset			= 0x07
 DEFC modulecall_blast_raw				= 0x08
 DEFC modulecall_blast_cbreak			= 0x09
 DEFC modulecall_blast_delay				= 0x0C
@@ -33,9 +34,11 @@ DEFC modulecall_blast_getcury			= 0x50
 DEFC modulecall_blast_getcurx			= 0x51
 DEFC modulecall_blast_getmaxy			= 0x52
 DEFC modulecall_blast_getmaxx			= 0x53
-DEFC modulecall_blast_inch				= 0x54
-DEFC modulecall_blast_move				= 0x58
+DEFC modulecall_blast_getyoff			= 0x54
+DEFC modulecall_blast_getxoff			= 0x55
+DEFC modulecall_blast_inch				= 0x58
 DEFC modulecall_blast_mvinch			= 0x5C
+DEFC modulecall_blast_move				= 0x5F
 
 DEFC MODULECALL = 0x3FF8
 

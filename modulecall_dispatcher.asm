@@ -40,7 +40,7 @@ J_blast_modulecall:
 	defw	F_setfont
 	defw	F_getfont
 	defw	0
-	defw	0
+	defw	0;F_offset
 	defw	F_raw
 	defw	F_cbreak
 	defw	0
@@ -82,12 +82,14 @@ J_blast_modulecall:
 	defw	F_getcurx
 	defw	F_getmaxy
 	defw	F_getmaxx
+	defw	0;F_getyoff
+	defw	0;F_getxoff
+	defw	0,0
 	defw	0;F_inch
 	defw	0,0,0
-	defw	F_move
-	defw	0,0,0
 	defw	0;F_mvinch
-	defw	0,0,0
+	defw	0,0
+	defw	F_move
 .jumpend:
 
 .unknowncall:

@@ -56,6 +56,10 @@ void *getfont(short fontid __A)
 	Note: Spectranet module only (not needed for static linking).
 	Provides the setfont addresses of fonts built into the module.
 	Returns NULL if the fontid is not recognised.
+short offset(void *buffer __IX, short y_off __B, short x_off __C)
+	Sets the display offset of the buffer (and marks it all as needing repaint).
+	BE_INVAL: buffer==NULL.
+	BE_BADB: bad (corrupted?) buffer.
 short raw(void *buffer __IX)
 	Puts buffer into raw input mode.
 	BE_INVAL: buffer==NULL.
@@ -171,6 +175,10 @@ short getcurx(void *buffer __IX)
 short getmaxy(void *buffer __IX)
 	0xFF on error.
 short getmaxx(void *buffer __IX)
+	0xFF on error.
+short getyoff(void *buffer __IX)
+	0xFF on error.
+short getxoff(void *buffer __IX)
 	0xFF on error.
 long inch(void *buffer __IX)
 	Returns the character (in L) and attribute (in H) under the cursor; 0 on error.

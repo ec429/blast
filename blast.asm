@@ -34,6 +34,8 @@ F_initscr:
 	LD (IX+O_MAXX),C
 	LD (IX+O_CURY),0
 	LD (IX+O_CURX),0
+	LD (IX+O_YOFF),0
+	LD (IX+O_XOFF),0
 	LD (IX+O_INMODE),1
 	LD (IX+O_INBUFP),0
 	LD (IX+O_FONT),0

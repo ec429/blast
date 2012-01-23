@@ -2,6 +2,7 @@ blast_buflen
 blast_initscr
 blast_setfont
 blast_getfont
+blast_offset
 blast_raw
 blast_cbreak
 blast_delay
@@ -37,5 +38,7 @@ blast_getcury
 blast_getcurx
 blast_getmaxy
 blast_getmaxx
+blast_getyoff
+blast_getxoff
 blast_inch
 blast_mvinch
