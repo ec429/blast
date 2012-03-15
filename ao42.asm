@@ -41,9 +41,9 @@ F_AO42_print:
 	EXX
 	AND E			; column%4
 	EXX
-	RET Z
+	;RET Z
 	CP 3
-	RET Z
+	;RET Z
 	INC HL
 	LD (HL),B
 	RET
