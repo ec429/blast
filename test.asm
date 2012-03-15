@@ -52,6 +52,7 @@
 	LD A,E
 	JR NZ,.main_print
 	CALL F_attrset
+	CALL F_beep
 	JR .main_loop
 .main_print:
 	LD A,E

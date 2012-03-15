@@ -519,6 +519,45 @@ F_clear:
 	XOR A
 	RET
 
+.global F_beep
+F_beep:
+	LD BC,0
+	LD DE,0
+	LD A,0
+.beep_loop:
+	OUT (0xFE),A
+	EX AF,AF'
+	INC BC
+	INC D
+	INC E
+	LD A,D
+	SUB 4
+	JR NZ,.beep_1
+	LD D,A
+	EX AF,AF'
+	XOR 0x10
+	EX AF,AF'
+.beep_1:
+	LD A,E
+	SUB 7
+	JR NZ,.beep_2
+	LD E,A
+	EX AF,AF'
+	XOR 0x10
+	EX AF,AF'
+.beep_2:
+	PUSH BC
+	LD B,0x80
+.beep_wait:
+	DJNZ .beep_wait
+	POP BC
+	LD A,B
+	AND 0
+	OR C
+	RET Z
+	EX AF,AF'
+	JR .beep_loop
+
 .global F_scroll
 F_scroll:
 	LD D,A

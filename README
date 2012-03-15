@@ -23,6 +23,7 @@ Current implementation status:
 	F_addstr	#  "
 	F_mvaddstr	#  "
 	F_clear
+	F_beep
 	F_scroll	# supports up (count>0) only
 	F_refresh
 	F_attrset

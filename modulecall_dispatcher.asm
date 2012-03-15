@@ -58,7 +58,7 @@ J_blast_modulecall:
 	defw	0;F_erase
 	defw	0;F_clrtobot
 	defw	0;F_clearok
-	defw	0;F_beep
+	defw	F_beep
 	defw	F_scroll
 	defw	0,0,0,0,0,0,0,0,0
 	defw	F_mvaddch
